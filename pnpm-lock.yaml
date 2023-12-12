@@ -150,8 +150,8 @@ dependencies:
     specifier: ^1.4.5
     version: 1.4.7(@types/react@18.2.42)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)(viem@1.19.11)(zod@3.22.4)
   ws:
-    specifier: ^8.14.2
-    version: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+    specifier: ^8.15.1
+    version: 8.15.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
   zod:
     specifier: ^3.22.4
     version: 3.22.4
@@ -6660,7 +6660,7 @@ packages:
       '@babel/runtime': 7.23.5
       eventemitter3: 4.0.7
       uuid: 8.3.2
-      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      ws: 8.15.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     optionalDependencies:
       bufferutil: 4.0.8
       utf-8-validate: 5.0.10
@@ -7764,8 +7764,8 @@ packages:
         optional: true
     dev: false
 
-  /ws@8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10):
-    resolution: {integrity: sha512-wEBG1ftX4jcglPxgFCMJmZ2PLtSbJ2Peg6TmpJFTbe9GZYOQCDPdMYu/Tm0/bGZkw8paZnJY45J4K2PZrLYq8g==}
+  /ws@8.15.1(bufferutil@4.0.8)(utf-8-validate@5.0.10):
+    resolution: {integrity: sha512-W5OZiCjXEmk0yZ66ZN82beM5Sz7l7coYxpRkzS+p9PP+ToQry8szKh+61eNktr7EA9DOwvFGhfC605jDHbP6QQ==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
