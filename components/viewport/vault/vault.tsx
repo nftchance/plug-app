@@ -14,10 +14,8 @@ export const Vault: VaultComponent = () => {
 	const { vault } = useVaults()
 
 	return expanded ? (
-		<div className="h-screen bg-stone-900 text-white">
-			<div className="pt-18 bg-stone-900 text-white">
-				{vault ? <Panel /> : <Deploy />}
-			</div>
+		<div className="relative h-screen bg-stone-900 text-white">
+			{vault ? <Panel /> : <Deploy />}
 		</div>
 	) : null
 }
