@@ -1,3 +1,4 @@
+import { ChainId } from "./types/blockchain"
 import {
 	base,
 	baseSepolia,
@@ -16,16 +17,12 @@ export const chains = [
 	optimismSepolia
 ]
 
-export const BLOCK_EXPLORERS = {
-	// ! Mainnets
-	1: "https://etherscan.io",
-	10: "https://optimistic.etherscan.io",
-	8453: "https://sepolia.base.org",
-	// ! Testnets
-	11155111: "https://sepolia.etherscan.io",
-	11155420: "https://sepolia-optimistic.etherscan.io",
-	84532: "https://sepolia-explorer.base.org"
-} as const
+export const formatName = (name: string) => {
+	return name
+		.replace("Mainnet", "")
+		.replace("Testnet", "")
+		.replace("OP", "Optimism")
+}
 
 export const truncateAddress = (address: string) => {
 	return `${address.slice(0, 6)}...${address.slice(-4)}`
@@ -40,34 +37,31 @@ export const truncateBalance = (
 	return (Number(value) / 10 ** Number(decimals)).toFixed(2)
 }
 
-export const formatName = (name: string) => {
-	return name
-		.replace("Mainnet", "")
-		.replace("Testnet", "")
-		.replace("OP", "Optimism")
-}
-
-export const blockExplorerUrl = (chainId: keyof typeof BLOCK_EXPLORERS) => {
-	return BLOCK_EXPLORERS[chainId]
+export const blockExplorerUrl = (chainId: number) => {
+	return chains.find(chain => chain.id === chainId)?.blockExplorers.default
+		.url
 }
 
 export const blockExplorerAddress = (
-	chainId: keyof typeof BLOCK_EXPLORERS,
-	address: string
+	chainId: number,
+	address: string | undefined
 ) => {
+	if (!address) return ""
 	return `${blockExplorerUrl(chainId)}/address/${address}`
 }
 
 export const blockExplorerTransaction = (
-	chainId: keyof typeof BLOCK_EXPLORERS,
-	tx: string
+	chainId: number,
+	tx: string | undefined
 ) => {
+	if (!tx) return ""
 	return `${blockExplorerUrl(chainId)}/tx/${tx}`
 }
 
 export const blockExplorerBlock = (
-	chainId: keyof typeof BLOCK_EXPLORERS,
-	block: string
+	chainId: number,
+	block: string | undefined
 ) => {
+	if (!block) return ""
 	return `${blockExplorerUrl(chainId)}/block/${block}`
 }

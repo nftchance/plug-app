@@ -14,10 +14,21 @@ import {
 	useSwitchNetwork
 } from "wagmi"
 
-import { ExitIcon, GlobeIcon } from "@radix-ui/react-icons"
+import {
+	ExclamationTriangleIcon,
+	ExitIcon,
+	GlobeIcon
+} from "@radix-ui/react-icons"
 
 import { useTabs } from "@/contexts"
-import { chains, formatName, truncateBalance } from "@/lib/blockchain"
+import {
+	blockExplorerAddress,
+	chains,
+	formatName,
+	truncateBalance
+} from "@/lib/blockchain"
+
+const TESTNET_KEYS = ["Testnet", "Sepolia", "Ropsten", "Rinkeby", "Goerli"]
 
 export const Wallet: FC<PropsWithChildren> = () => {
 	const { pane } = useTabs()
@@ -31,10 +42,16 @@ export const Wallet: FC<PropsWithChildren> = () => {
 	const { decimals, symbol, value } = data ?? {}
 
 	const [isDisconnecting, setIsDisconnecting] = useState(false)
+	const [showTestnets, setShowTestnets] = useState(false)
 
 	const balance = useMemo(
 		() => truncateBalance(value, decimals),
 		[value, decimals]
+	)
+
+	const blockExplorer = useMemo(
+		() => blockExplorerAddress(chainId, address),
+		[chainId, address]
 	)
 
 	useEffect(() => {
@@ -47,6 +64,8 @@ export const Wallet: FC<PropsWithChildren> = () => {
 		}
 	}, [isDisconnecting])
 
+	if (!address) return null
+
 	return (
 		<div className="mt-[-46px] h-screen w-[360px] text-center">
 			<div className="m-auto mt-[46px] flex w-full py-16 text-center text-white">
@@ -56,13 +75,27 @@ export const Wallet: FC<PropsWithChildren> = () => {
 			</div>
 
 			<div className="flex w-full flex-row border-y-[1px] border-stone-950 text-center">
+				<a
+					target="_blank"
+					rel="noreferrer"
+					href={blockExplorer}
+					className={`text-md group pointer-events-auto flex h-full w-1/2 items-center justify-center border-r-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950`}
+				>
+					<GlobeIcon
+						className="mr-2 opacity-60"
+						width={16}
+						height={16}
+					/>
+					Explorer
+				</a>
+
 				<button
 					onClick={() =>
 						isDisconnecting
 							? disconnect()
 							: setIsDisconnecting(true)
 					}
-					className={`text-md group pointer-events-auto flex h-full w-full items-center justify-center border-r-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-red-500 active:text-stone-950 ${
+					className={`text-md group pointer-events-auto flex h-full w-1/2 items-center justify-center border-r-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-red-500 active:text-stone-950 ${
 						isDisconnecting ? "active" : ""
 					}`}
 				>
@@ -75,24 +108,48 @@ export const Wallet: FC<PropsWithChildren> = () => {
 				</button>
 			</div>
 
+			<div className="flex w-full flex-row border-b-[1px] border-stone-950 text-center">
+				<button
+					onClick={() => setShowTestnets(!showTestnets)}
+					className="text-md group pointer-events-auto flex h-full w-full items-center justify-center justify-center border-r-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white"
+				>
+					<ExclamationTriangleIcon
+						className="mr-2 opacity-60"
+						width={16}
+						height={16}
+					/>
+					{showTestnets ? "Hide" : "Show"} Testnets
+				</button>
+			</div>
+
 			<div className="flex w-full flex-col">
 				<div className="mb-auto">
 					{switchNetwork &&
-						chains.map(({ id, name }) => {
-							const active = chainId === Number(id)
+						chains
+							.filter(({ name }) => {
+								if (showTestnets) return true
 
-							return (
-								<button
-									key={id}
-									onClick={() => switchNetwork(Number(id))}
-									className={`text-md group pointer-events-auto mt-auto flex h-full h-min w-full items-center justify-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950 ${
-										active ? "active" : ""
-									}`}
-								>
-									{formatName(name)}
-								</button>
-							)
-						})}
+								return !TESTNET_KEYS.some(key =>
+									name.includes(key)
+								)
+							})
+							.map(({ id, name }) => {
+								const active = chainId === Number(id)
+
+								return (
+									<button
+										key={id}
+										onClick={() =>
+											switchNetwork(Number(id))
+										}
+										className={`text-md group pointer-events-auto mt-auto flex h-full h-min w-full items-center justify-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950 ${
+											active ? "active" : ""
+										}`}
+									>
+										{formatName(name)}
+									</button>
+								)
+							})}
 				</div>
 			</div>
 		</div>
