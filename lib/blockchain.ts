@@ -1,4 +1,4 @@
-const BLOCK_EXPLORERS = {
+export const BLOCK_EXPLORERS = {
 	// ! Mainnets
 	1: "https://etherscan.io",
 	10: "https://optimistic.etherscan.io",
