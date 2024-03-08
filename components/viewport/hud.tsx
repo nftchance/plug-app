@@ -5,11 +5,13 @@ import { useRouter } from "next/router"
 
 import { Cross1Icon, HomeIcon } from "@radix-ui/react-icons"
 
-import { useTabs } from "@/contexts/TabsProvider"
+import { Vault } from "@/components/viewport/vault"
+import { useTabs, useVaults } from "@/contexts"
 import { cn } from "@/lib/utils"
 
 export const Hud: FC<PropsWithChildren> = ({ children }) => {
 	const { tabs, handleAdd, handleRemove } = useTabs()
+	const { vault, vaults } = useVaults()
 
 	const router = useRouter()
 	const path = usePathname()
@@ -100,11 +102,16 @@ export const Hud: FC<PropsWithChildren> = ({ children }) => {
 							</button>
 						</button>
 					))}
+
+					<Vault.Toggler />
+					<Vault.Selector />
 				</div>
 			</div>
 
-			<div className="absolute inset-0 flex h-full min-h-screen flex-col overscroll-none bg-stone-900 pt-12">
-				{children}
+			<div className="inset-0 flex h-full min-h-screen flex-row overscroll-none bg-stone-900 pt-12">
+				<div className="w-full">{children}</div>
+
+				<Vault />
 			</div>
 		</>
 	)

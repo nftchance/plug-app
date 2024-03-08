@@ -26,21 +26,26 @@ const ephemeralTabs: string[] = ["/canvas/create", "/canvas/templates"]
 export const TabsContext = createContext<{
 	tabs: Tab[]
 	ephemeralTabs: string[]
+	expanded: boolean
 	handleAdd: (tab: Tab) => void
 	handleRemove: (index: number) => void
 	handleMove: (index: number, newIndex: number) => void
+	handleExpanded: () => void
 }>({
 	tabs: [],
 	ephemeralTabs: [],
+	expanded: true,
 	handleAdd: () => {},
 	handleRemove: () => {},
-	handleMove: () => {}
+	handleMove: () => {},
+	handleExpanded: () => {}
 })
 
 export const TabsProvider: FC<PropsWithChildren> = ({ children }) => {
 	const router = useRouter()
 	const path = usePathname()
 
+	const [expanded, setExpanded] = useState(true)
 	const [tabs, setTabs] = useState<Tab[]>(() => {
 		if (typeof window === "undefined") return []
 
@@ -105,6 +110,10 @@ export const TabsProvider: FC<PropsWithChildren> = ({ children }) => {
 		})
 	}, [])
 
+	const handleExpanded = useCallback(() => {
+		setExpanded(expanded => !expanded)
+	}, [expanded])
+
 	useEffect(() => {
 		localStorage.setItem("tabs", JSON.stringify(tabs))
 	}, [tabs])
@@ -129,9 +138,11 @@ export const TabsProvider: FC<PropsWithChildren> = ({ children }) => {
 			value={{
 				tabs,
 				ephemeralTabs,
+				expanded,
 				handleAdd,
 				handleRemove,
-				handleMove
+				handleMove,
+				handleExpanded
 			}}
 		>
 			<Hud>{children}</Hud>
