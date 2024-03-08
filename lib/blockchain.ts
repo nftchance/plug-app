@@ -1,4 +1,3 @@
-import { ChainId } from "./types/blockchain"
 import {
 	base,
 	baseSepolia,

@@ -26,29 +26,30 @@ export const VaultProvider: FC<PropsWithChildren> = ({ children }) => {
 	// TODO: Wait to create the vault in the database until we've confirmed
 	//       the deployment was successful onchain.
 	const handleVaultDeploy = useCallback((vault: Vault) => {
-		setVaults(vaults => [...vaults, vault])
+		// setVaults(vaults => [...vaults, vault])
 	}, [])
 
 	// TODO: Make this connected to the database.
 	const handleVaultName = useCallback(
-		(name: string) => {
-			setVault(vault => {
-				if (!vault) return vault
-
-				vault.name = name
-
-				return vault
-			})
-		},
+		// (name: string) => {
+		// 	setVault(vault => {
+		// 		if (!vault) return vault
+		//
+		// 		vault.name = name
+		//
+		// 		return vault
+		// 	})
+		// },
+		() => {},
 		[vault]
 	)
 
 	// TODO: Update the active vault in the database so that it
 	//		 is the same when they log in
 	const handleVaultSelect = useCallback((vaultAddress: string) => {
-		const vault = vaults.find(v => v.address === vaultAddress)
-
-		setVault(vault)
+		// const vault = vaults.find(v => v.address === vaultAddress)
+		//
+		// setVault(vault)
 	}, [])
 
 	return (

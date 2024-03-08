@@ -6,12 +6,11 @@ import { useRouter } from "next/router"
 import { Cross1Icon, HomeIcon } from "@radix-ui/react-icons"
 
 import { Vault } from "@/components/viewport/vault"
-import { useTabs, useVaults } from "@/contexts"
+import { useTabs } from "@/contexts"
 import { cn } from "@/lib/utils"
 
 export const Hud: FC<PropsWithChildren> = ({ children }) => {
 	const { tabs, handleAdd, handleRemove } = useTabs()
-	const { vault, vaults } = useVaults()
 
 	const router = useRouter()
 	const path = usePathname()

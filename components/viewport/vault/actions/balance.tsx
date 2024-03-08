@@ -22,7 +22,7 @@ export const Balance: FC<
 		() =>
 			BigInt(direction) *
 			(amount ? BigInt(amount * 10 ** 18) : BigInt(0)),
-		[amount]
+		[direction, amount]
 	)
 
 	const preBalance = useMemo(
