@@ -1,18 +1,20 @@
-"use client"
-
+import type { FC, PropsWithChildren } from "react"
 import {
 	createContext,
-	FC,
-	PropsWithChildren,
 	useCallback,
 	useContext,
 	useEffect,
+	useMemo,
 	useState
 } from "react"
 
 import { usePathname, useRouter } from "next/navigation"
 
+import { Activity } from "lucide-react"
+
 import { Hud } from "@/components/viewport/hud"
+import { Deploy, Deposit, Tokens, Withdraw } from "@/components/viewport/vault"
+import { Wallet } from "@/components/viewport/vault/actions/manage"
 
 type Tab = {
 	label: string
@@ -24,17 +26,23 @@ type Tab = {
 const ephemeralTabs: string[] = ["/canvas/create", "/canvas/templates"]
 
 export const TabsContext = createContext<{
+	pane: string
+	Panel: JSX.Element
 	tabs: Tab[]
 	ephemeralTabs: string[]
 	expanded: boolean
+	handlePane: (pane: string | undefined) => void
 	handleAdd: (tab: Tab) => void
 	handleRemove: (index: number) => void
 	handleMove: (index: number, newIndex: number) => void
 	handleExpanded: () => void
 }>({
+	pane: "tokens",
+	Panel: <Tokens />,
 	tabs: [],
 	ephemeralTabs: [],
 	expanded: true,
+	handlePane: () => {},
 	handleAdd: () => {},
 	handleRemove: () => {},
 	handleMove: () => {},
@@ -53,6 +61,35 @@ export const TabsProvider: FC<PropsWithChildren> = ({ children }) => {
 
 		return savedTabs ? JSON.parse(savedTabs) : []
 	})
+	const [pane, setPane] = useState("tokens")
+	const [nextPane, setNextPane] = useState("tokens")
+
+	const Panel = useMemo(() => {
+		switch (pane) {
+			case "tokens":
+				return <Tokens />
+			case "activity":
+				return <Activity />
+			case "withdraw":
+				return <Withdraw />
+			case "wallet":
+				return <Wallet />
+			case "deploy":
+				return <Deploy />
+			default:
+				return <Deposit />
+		}
+	}, [pane])
+
+	const handlePane = useCallback((pane: string | undefined) => {
+		setPane(previousPane => {
+			const newPane = pane || nextPane
+
+			setNextPane(previousPane)
+
+			return newPane
+		})
+	}, [])
 
 	const handleAdd = useCallback(
 		(tab: Tab) => {
@@ -136,9 +173,12 @@ export const TabsProvider: FC<PropsWithChildren> = ({ children }) => {
 	return (
 		<TabsContext.Provider
 			value={{
+				pane,
+				Panel,
 				tabs,
 				ephemeralTabs,
 				expanded,
+				handlePane,
 				handleAdd,
 				handleRemove,
 				handleMove,

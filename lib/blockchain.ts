@@ -1,3 +1,21 @@
+import {
+	base,
+	baseSepolia,
+	mainnet,
+	optimism,
+	optimismSepolia,
+	sepolia
+} from "wagmi/chains"
+
+export const chains = [
+	mainnet,
+	sepolia,
+	base,
+	baseSepolia,
+	optimism,
+	optimismSepolia
+]
+
 export const BLOCK_EXPLORERS = {
 	// ! Mainnets
 	1: "https://etherscan.io",
@@ -11,6 +29,22 @@ export const BLOCK_EXPLORERS = {
 
 export const truncateAddress = (address: string) => {
 	return `${address.slice(0, 6)}...${address.slice(-4)}`
+}
+
+export const truncateBalance = (
+	value: bigint | undefined,
+	decimals: number | undefined
+) => {
+	if (!value || !decimals) return 0
+
+	return (Number(value) / 10 ** Number(decimals)).toFixed(2)
+}
+
+export const formatName = (name: string) => {
+	return name
+		.replace("Mainnet", "")
+		.replace("Testnet", "")
+		.replace("OP", "Optimism")
 }
 
 export const blockExplorerUrl = (chainId: keyof typeof BLOCK_EXPLORERS) => {

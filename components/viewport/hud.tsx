@@ -105,6 +105,7 @@ export const Hud: FC<PropsWithChildren> = ({ children }) => {
 
 					<Vault.Toggler />
 					<Vault.Selector />
+					<Vault.Wallet />
 				</div>
 			</div>
 

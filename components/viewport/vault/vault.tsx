@@ -1,26 +1,26 @@
 import { FC, PropsWithChildren } from "react"
 
-import { Deploy, Panel, Selector, Toggler } from "@/components/viewport/vault"
-import { useTabs, useVaults } from "@/contexts"
+import { Panel, Selector, Toggler, Wallet } from "@/components/viewport/vault"
+import { useTabs } from "@/contexts"
 
 interface VaultComponent extends FC<PropsWithChildren> {
 	Selector: typeof Selector
 	Toggler: typeof Toggler
+	Wallet: typeof Wallet
 }
 
 export const Vault: VaultComponent = () => {
 	const { expanded } = useTabs()
 
-	const { vault } = useVaults()
-
 	return expanded ? (
 		<div className="relative h-screen bg-stone-900 text-white">
-			{vault ? <Panel /> : <Deploy />}
+			<Panel />
 		</div>
 	) : null
 }
 
 Vault.Selector = Selector
 Vault.Toggler = Toggler
+Vault.Wallet = Wallet
 
 export default Vault

@@ -25,7 +25,7 @@ export const Deposit: FC<PropsWithChildren> = () => {
 
 			<button
 				onClick={() => {}}
-				className={`text-md group pointer-events-auto mt-auto flex h-full h-min w-full items-center justify-center border-b-[1px] border-stone-950 bg-white p-4 text-stone-950 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950`}
+				className="text-md group pointer-events-auto mt-auto flex h-full h-min w-full items-center justify-center border-b-[1px] border-stone-950 bg-white p-4 text-stone-950 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950"
 			>
 				Submit
 			</button>

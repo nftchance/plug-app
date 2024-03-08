@@ -1,3 +1,4 @@
+export { Deploy } from "./deploy"
 export { Activity } from "./activity"
 export { Deposit } from "./deposit"
 export { Tokens } from "./tokens"
