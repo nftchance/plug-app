@@ -20,18 +20,22 @@ export const Balance: FC<
 	const { data } = useBalance({ address, chainId })
 	const { decimals, symbol, value } = data ?? {}
 
-	const [asset, setAsset] = useState<(typeof TOKENS)[0] | undefined>(
-		undefined
-	)
 	const [amount, setAmount] = useState<number>(0)
 
-	const [search, setSearch] = useState("")
-	const [isSearching, setIsSearching] = useState(false)
+	const [search, setSearch] = useState<{
+		query: string
+		isSearching: boolean
+		asset: (typeof TOKENS)[0] | undefined
+	}>({
+		query: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+		isSearching: false,
+		asset: undefined
+	})
 
 	const { tokens } = useTokens({
 		chainId,
 		address,
-		tokenAddress: asset?.address
+		tokenAddress: search.query || search?.asset?.address
 	})
 
 	const amountBigInt = useMemo(() => {
@@ -55,16 +59,10 @@ export const Balance: FC<
 	)
 
 	const assetSymbol = useMemo(() => {
-		if (asset) return asset.symbol
+		if (search.asset) return search.asset.symbol
 
 		return symbol
-	}, [asset, symbol])
-
-	const handleFind = useCallback((asset: (typeof TOKENS)[0]) => {
-		setSearch("")
-		setIsSearching(false)
-		setAsset(asset)
-	}, [])
+	}, [search.asset, symbol])
 
 	return (
 		<div className="flex h-full flex-col">
@@ -86,7 +84,12 @@ export const Balance: FC<
 				/>
 
 				<button
-					onClick={() => setIsSearching(!isSearching)}
+					onClick={() => {
+						setSearch(previousSearch => ({
+							...previousSearch,
+							isSearching: !search.isSearching
+						}))
+					}}
 					className="pointer-events-auto flex h-full w-min flex-row items-center justify-center border-l-[1px] border-stone-950 bg-transparent p-4 transition-all duration-200 ease-in-out hover:bg-stone-950"
 				>
 					{assetSymbol}
@@ -98,27 +101,38 @@ export const Balance: FC<
 				</button>
 			</div>
 
-			{isSearching && (
+			{search.isSearching && (
 				<div className="flex flex-col">
 					<Input
 						name="asset"
 						type="text"
 						placeholder={`TOKEN${
-							tokens.length > 0 ? "NAME OR" : ""
+							tokens.length > 1 ? " NAME OR" : ""
 						} ADDRESS`}
 						autoComplete="off"
-						value={search}
-						onChange={e => setAmount(Number(e.target.value))}
+						value={search.query}
+						onChange={e => {
+							setSearch(previousSearch => ({
+								...previousSearch,
+								query: e.target.value
+							}))
+						}}
 						className="relative w-full border-b-[1px] border-stone-950 bg-transparent py-8 uppercase text-white outline-none hover:bg-stone-950"
 					/>
 
-					{tokens.length > 0 ?? (
-						<div className="flex h-60 flex-col overflow-scroll">
+					{tokens && tokens.length > 0 ? (
+						<div className="flex max-h-60 flex-col overflow-scroll">
 							{tokens.map((asset, index) => (
 								<button
 									key={index}
-									onClick={() => handleFind(asset)}
-									className="flex h-full w-full flex-row items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950"
+									onClick={() => {
+										setSearch({
+											query: "",
+											isSearching: false,
+											asset
+										})
+									}}
+									className="flex h-min w-full flex-row items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950"
 								>
 									<img
 										src={asset.logoURI}
@@ -129,7 +143,7 @@ export const Balance: FC<
 								</button>
 							))}
 						</div>
-					)}
+					) : null}
 				</div>
 			)}
 

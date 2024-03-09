@@ -1,13 +1,10 @@
 import { useMemo } from "react"
 
+import { isAddress } from "viem"
 import { useContractReads } from "wagmi"
 import { erc20ABI } from "wagmi"
 
 import { TOKENS } from "@/lib/tokens"
-
-// TODO: Even when there are no tokens in the static list, when an address is provided, it should
-//       be added to the list so that the user can click it and confirm. We don't have a form submission
-//       on searching for tokens, so instead we need to make sure that they still select it.
 
 export const useTokens = ({
 	chainId,
@@ -47,15 +44,50 @@ export const useTokens = ({
 		]
 	})
 
+	const metadata = useMemo(() => {
+		const [name, symbol, decimals, balance] =
+			(isAddress(typedAddress) && data) || []
+
+		if (tokenAddress === undefined) return undefined
+
+		// NOTE: Use the logoURI of a similar token in name -- This could end up being a bad decision, but
+		//		 it improves the UX for the user. If they have a token that is not in the list, it will
+		//		 still show up with a logo that exists on another chain.
+		let logoURI = ""
+		if (symbol?.result !== undefined) {
+			const found = TOKENS.find(token => token.symbol === symbol.result)
+
+			if (found) logoURI = found.logoURI
+		}
+
+		if (
+			name?.result === undefined ||
+			symbol?.result === undefined ||
+			decimals?.result === undefined ||
+			balance?.result === undefined
+		)
+			return undefined
+
+		return {
+			address: tokenAddress,
+			name: name.result,
+			symbol: symbol.result,
+			decimals: decimals.result,
+			balance: balance.result,
+			chainId,
+			logoURI
+		}
+	}, [tokenAddress, data])
+
 	const tokens = useMemo(() => {
-		return TOKENS.filter(token => token.chainId === chainId)
+		const staticTokens = TOKENS.filter(token => token.chainId === chainId)
+
+		if (metadata === undefined) return staticTokens
+
+		return [metadata, ...staticTokens]
 	}, [chainId])
 
-	const metadata = useMemo(() => {
-		// TODO: Implement the recover of the metadata from the onchain read.
-	}, [data])
-
-	return { tokens }
+	return { tokens, metadata }
 }
 
 export default useTokens
