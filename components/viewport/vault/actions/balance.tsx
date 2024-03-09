@@ -1,5 +1,5 @@
 import type { FC, PropsWithChildren } from "react"
-import { useCallback, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 
 import { useBalance, useChainId } from "wagmi"
 
@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input"
 import { truncateBalance } from "@/lib/blockchain"
 import useTokens from "@/lib/hooks/useTokens"
 import { TOKENS } from "@/lib/tokens"
+
+// TODO: Implement ability to deposit tokens into vault from wallet and in vice versa.
 
 export const Balance: FC<
 	PropsWithChildren & { direction: number; action: string }
@@ -21,13 +23,12 @@ export const Balance: FC<
 	const { decimals, symbol, value } = data ?? {}
 
 	const [amount, setAmount] = useState<number>(0)
-
 	const [search, setSearch] = useState<{
 		query: string
 		isSearching: boolean
 		asset: (typeof TOKENS)[0] | undefined
 	}>({
-		query: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+		query: "",
 		isSearching: false,
 		asset: undefined
 	})
