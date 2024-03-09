@@ -20,7 +20,6 @@ import {
 	GlobeIcon
 } from "@radix-ui/react-icons"
 
-import { useTabs } from "@/contexts"
 import {
 	blockExplorerAddress,
 	chains,
@@ -30,9 +29,9 @@ import {
 
 const TESTNET_KEYS = ["Testnet", "Sepolia", "Ropsten", "Rinkeby", "Goerli"]
 
-export const Wallet: FC<PropsWithChildren> = () => {
-	const { pane } = useTabs()
+// TODO: If you are already connected to a testnet, should automatically show the testnets.
 
+export const Wallet: FC<PropsWithChildren> = () => {
 	const { address } = useAccount()
 	const chainId = useChainId()
 	const { switchNetwork } = useSwitchNetwork()

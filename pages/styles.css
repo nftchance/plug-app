@@ -136,13 +136,3 @@ body {
 #__next {
 	min-height: 100vh;
 }
-
-.clean::-webkit-inner-spin-button,
-.clean::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
-}
-
-.clean {
-	-moz-appearance: textfield;
-}

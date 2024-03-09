@@ -25,6 +25,8 @@ type Tab = {
 
 const ephemeralTabs: string[] = ["/canvas/create", "/canvas/templates"]
 
+const INITIAL_PANE = "deposit"
+
 export const TabsContext = createContext<{
 	pane: string
 	Panel: JSX.Element
@@ -37,7 +39,7 @@ export const TabsContext = createContext<{
 	handleMove: (index: number, newIndex: number) => void
 	handleExpanded: () => void
 }>({
-	pane: "tokens",
+	pane: INITIAL_PANE,
 	Panel: <Tokens />,
 	tabs: [],
 	ephemeralTabs: [],
@@ -61,8 +63,8 @@ export const TabsProvider: FC<PropsWithChildren> = ({ children }) => {
 
 		return savedTabs ? JSON.parse(savedTabs) : []
 	})
-	const [pane, setPane] = useState("tokens")
-	const [nextPane, setNextPane] = useState("tokens")
+	const [pane, setPane] = useState(INITIAL_PANE)
+	const [nextPane, setNextPane] = useState(INITIAL_PANE)
 
 	const Panel = useMemo(() => {
 		switch (pane) {
