@@ -1,4 +1,5 @@
-import { FC, PropsWithChildren, useEffect, useState } from "react"
+import type { FC, PropsWithChildren } from "react"
+import { useEffect, useState } from "react"
 
 import { usePathname } from "next/navigation"
 import { useRouter } from "next/router"
@@ -17,19 +18,18 @@ export const Hud: FC<PropsWithChildren> = ({ children }) => {
 
 	const [client, setClient] = useState(false)
 
+	const color = Math.floor(Math.random() * 16777215).toString(16)
+
 	useEffect(() => {
 		setClient(true)
 	}, [])
 
 	useEffect(() => {
-		// * We create a custom tab for the canvas creation route.
 		switch (path) {
 			case "/canvas/create":
 				handleAdd({
 					label: `New Canvas`,
-					color: `#${Math.floor(Math.random() * 16777215).toString(
-						16
-					)}`,
+					color: `#${color}`,
 					href: `/canvas/create`,
 					active: true
 				})
@@ -45,7 +45,7 @@ export const Hud: FC<PropsWithChildren> = ({ children }) => {
 			default:
 				break
 		}
-	}, [path, handleAdd])
+	}, [color, path, handleAdd])
 
 	if (!client) return null
 
