@@ -6,11 +6,7 @@ import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react"
 
 import { chains } from "@/lib/blockchain"
 
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_ID || undefined
-
-if (!projectId) {
-	throw new Error("NEXTWALLETCONNECT_ID is not defined")
-}
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_ID || ""
 
 const metadata = {
 	name: "Plug",
