@@ -68,7 +68,7 @@
 		"tsx": "^4.6.2",
 		"viem": "^1.20.0",
 		"wagmi": "^1.4.5",
-		"ws": "^8.14.2",
+		"ws": "^8.16.0",
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {
@@ -83,7 +83,7 @@
 		"eslint": "^8",
 		"eslint-config-next": "14.0.4",
 		"postcss": "^8",
-		"prettier": "^3.0.3",
+		"prettier": "^3.2.5",
 		"prettier-plugin-tailwindcss": "^0.5.9",
 		"prisma": "^5.7.0",
 		"tailwindcss": "^3.3.6",
