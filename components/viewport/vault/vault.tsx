@@ -1,15 +1,9 @@
-import { FC, PropsWithChildren } from "react"
+import type { FC, PropsWithChildren } from "react"
 
-import { Panel, Selector, Toggler, Wallet } from "@/components/viewport/vault"
+import { Panel } from "@/components/viewport/vault"
 import { useTabs } from "@/contexts"
 
-interface VaultComponent extends FC<PropsWithChildren> {
-	Selector: typeof Selector
-	Toggler: typeof Toggler
-	Wallet: typeof Wallet
-}
-
-export const Vault: VaultComponent = () => {
+export const Vault: FC<PropsWithChildren> = () => {
 	const { expanded } = useTabs()
 
 	return expanded ? (
@@ -18,9 +12,5 @@ export const Vault: VaultComponent = () => {
 		</div>
 	) : null
 }
-
-Vault.Selector = Selector
-Vault.Toggler = Toggler
-Vault.Wallet = Wallet
 
 export default Vault

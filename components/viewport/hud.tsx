@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 
 import { Cross1Icon, HomeIcon } from "@radix-ui/react-icons"
 
-import { Vault } from "@/components/viewport/vault"
+import { Selector, Toggler, Vault, Wallet } from "@/components/viewport/vault"
 import { useTabs } from "@/contexts"
 import { cn } from "@/lib/utils"
 
@@ -102,9 +102,9 @@ export const Hud: FC<PropsWithChildren> = ({ children }) => {
 						</button>
 					))}
 
-					<Vault.Toggler />
-					<Vault.Selector />
-					<Vault.Wallet />
+					<Toggler />
+					<Selector />
+					<Wallet />
 				</div>
 			</div>
 
