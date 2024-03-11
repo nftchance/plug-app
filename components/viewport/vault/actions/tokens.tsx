@@ -1,11 +1,11 @@
 import { FC, PropsWithChildren, useEffect, useMemo, useState } from "react"
 
-import { Network } from "alchemy-sdk"
+import Image from "next/image"
+
 import { motion } from "framer-motion"
 import { LoaderCircleIcon } from "lucide-react"
 
-// import { useChainId } from "wagmi"
-import { api } from "@/lib/api"
+import { useBalances } from "@/contexts/BalancesProvider"
 
 // TODO: Right now we base everything on their mainnet balance irrespective
 //       of the chain they are on. It should automatically map the proper
@@ -16,12 +16,7 @@ import { api } from "@/lib/api"
 export const Tokens: FC<PropsWithChildren> = () => {
 	const address = "0x62180042606624f02d8a130da8a3171e9b33894d"
 
-	// const chainId = useChainId()
-
-	const { data: tokens } = api.account.balances.useQuery({
-		address,
-		chain: Network.ETH_MAINNET
-	})
+	const { balances } = useBalances({ address })
 
 	const [index, setIndex] = useState(0)
 
@@ -33,16 +28,16 @@ export const Tokens: FC<PropsWithChildren> = () => {
 	}, [index])
 
 	useEffect(() => {
-		if (tokens === undefined) return
+		if (balances === undefined) return
 
 		const interval = setInterval(() => {
 			setIndex(prev => prev + 1)
 		}, 500)
 
 		return () => clearInterval(interval)
-	}, [tokens])
+	}, [balances])
 
-	if (tokens === undefined)
+	if (balances === undefined)
 		return (
 			<div className="flex flex-row items-center justify-center space-x-4 p-4 py-20">
 				<motion.div
@@ -69,7 +64,7 @@ export const Tokens: FC<PropsWithChildren> = () => {
 
 	return (
 		<>
-			{tokens
+			{balances
 				.filter(token => token?.symbol !== undefined)
 				.map((token, index) => {
 					if (token === undefined) return null
@@ -79,12 +74,19 @@ export const Tokens: FC<PropsWithChildren> = () => {
 							key={index}
 							className="flex h-min w-full flex-row items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950"
 						>
-							<img
-								src={token.logoURI}
-								alt={token.symbol}
-								className="mr-4 h-5 w-5"
+							<Image
+								src={token.logoURI ?? ""}
+								alt={token.symbol ?? ""}
+								className="mr-4 h-6 w-6 rounded-full bg-white/20"
+								width={16}
+								height={16}
 							/>
-							{token.symbol}
+							<span className="flex flex-col">
+								{token.symbol}
+								<span className="text-xs opacity-60">
+									{token.chainName}
+								</span>
+							</span>
 							<span className="ml-auto opacity-60">
 								{token.balance}
 							</span>

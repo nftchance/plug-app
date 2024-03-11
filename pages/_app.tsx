@@ -7,6 +7,7 @@ import { GoogleTagManager } from "@next/third-parties/google"
 
 import WalletConnector from "@/components/auth/connector"
 import { VaultProvider, WalletProvider } from "@/contexts"
+import { BalancesProvider } from "@/contexts/BalancesProvider"
 import { api } from "@/lib/api"
 import { type NextPageWithLayout } from "@/lib/types"
 
@@ -27,9 +28,11 @@ const PlugApp: AppType<{
 			<SessionProvider session={pageProps.session}>
 				<WalletProvider>
 					<VaultProvider>
-						<WalletConnector>
-							{getLayout(<Component {...pageProps} />)}
-						</WalletConnector>
+						<BalancesProvider>
+							<WalletConnector>
+								{getLayout(<Component {...pageProps} />)}
+							</WalletConnector>
+						</BalancesProvider>
 					</VaultProvider>
 				</WalletProvider>
 			</SessionProvider>
