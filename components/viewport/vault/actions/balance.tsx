@@ -1,6 +1,8 @@
 import type { FC, PropsWithChildren } from "react"
 import { useMemo, useState } from "react"
 
+import Image from "next/image"
+
 import { useBalance, useChainId } from "wagmi"
 
 import { ArrowRightIcon, ChevronDownIcon } from "@radix-ui/react-icons"
@@ -46,7 +48,7 @@ export const Balance: FC<
 			BigInt(direction) *
 			(amount ? BigInt(amount * 10 ** decimals) : BigInt(0))
 		)
-	}, [direction, amount])
+	}, [direction, amount, decimals])
 
 	const preBalance = useMemo(
 		() => truncateBalance(value, decimals),
@@ -135,7 +137,7 @@ export const Balance: FC<
 									}}
 									className="flex h-min w-full flex-row items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950"
 								>
-									<img
+									<Image
 										src={asset.logoURI}
 										alt={asset.name}
 										className="mr-4 h-5 w-5"

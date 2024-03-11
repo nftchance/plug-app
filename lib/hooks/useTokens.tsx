@@ -77,7 +77,7 @@ export const useTokens = ({
 			chainId,
 			logoURI
 		}
-	}, [tokenAddress, data])
+	}, [chainId, typedAddress, tokenAddress, data])
 
 	const tokens = useMemo(() => {
 		const staticTokens = TOKENS.filter(token => token.chainId === chainId)
@@ -85,7 +85,7 @@ export const useTokens = ({
 		if (metadata === undefined) return staticTokens
 
 		return [metadata, ...staticTokens]
-	}, [chainId])
+	}, [chainId, metadata])
 
 	return { tokens, metadata }
 }
