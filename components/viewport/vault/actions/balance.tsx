@@ -191,6 +191,21 @@ export const Balance: FC<
 				)}
 			</div>
 
+			{/* TODO: Send to vault or withdraw to self maybe */}
+			{direction == -1 && (
+				<div className="flex flex-row items-center justify-center border-b-[1px] border-stone-950">
+					<Input
+						name="to"
+						type="text"
+						placeholder="TO"
+						autoComplete="off"
+						value={address}
+						onChange={e => setAmount(Number(e.target.value))}
+						className="h-full w-full bg-transparent p-4 uppercase outline-none hover:bg-stone-950"
+					/>
+				</div>
+			)}
+
 			<div className="mx-auto mt-auto flex w-full flex-col">
 				<p className="mx-auto my-4 flex flex-row items-center">
 					{preBalance.toString()}{" "}

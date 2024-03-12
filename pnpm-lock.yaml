@@ -116,6 +116,9 @@ dependencies:
   npm-run-all:
     specifier: ^4.1.5
     version: 4.1.5
+  prisma-multischema:
+    specifier: ^1.1.4
+    version: 1.1.4
   react:
     specifier: ^18
     version: 18.2.0
@@ -6860,6 +6863,11 @@ packages:
 
   /pretty-format@3.8.0:
     resolution: {integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==}
+    dev: false
+
+  /prisma-multischema@1.1.4:
+    resolution: {integrity: sha512-38tQy7T8yIfdGNAOjhLuP/ZrmdWaPaYXPE1au7rLHDm5h5GFHFAtouVD2ihsSnXT0L1VSWd/yxNUOlsvKOcFZQ==}
+    hasBin: true
     dev: false
 
   /prisma@5.7.0:
