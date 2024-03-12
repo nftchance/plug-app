@@ -64,3 +64,22 @@ export const blockExplorerBlock = (
 	if (!block) return ""
 	return `${blockExplorerUrl(chainId)}/block/${block}`
 }
+
+export const chainImage = (chainId: number) => {
+	switch (chainId) {
+		case 1:
+			return "/blockchain/ethereum.png"
+		case 11155111:
+			return "/blockchain/ethereum.png"
+		case 10:
+			return "/blockchain/optimism.png"
+		case 11155420:
+			return "/blockchain/optimism.png"
+		case 8453:
+			return "/blockchain/base.png"
+		case 84532:
+			return "/blockchain/base.png"
+		default:
+			return "/blockchain/ethereum.png"
+	}
+}

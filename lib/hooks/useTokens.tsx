@@ -97,8 +97,6 @@ export const useTokens = ({
 						.includes(tokenAddress.toLowerCase())
 				)
 			})
-			// when the tokenAddress is not an address, we want to sort the tokens by the closest match, which
-			// is the token with the shortest symbol length
 			.sort((a, b) => {
 				if (tokenAddress === undefined) return 0
 				if (isAddress(tokenAddress)) {

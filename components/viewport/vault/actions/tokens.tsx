@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { LoaderCircleIcon } from "lucide-react"
 
 import { useBalances } from "@/contexts/BalancesProvider"
+import { chainImage } from "@/lib/blockchain"
 
 // TODO: When we click on a token on the list we should direct to the withdrawal
 //       page with the token selected.
@@ -64,7 +65,8 @@ export const Tokens: FC<PropsWithChildren> = () => {
 			{balances
 				.filter(token => token?.symbol !== undefined)
 				.map((token, index) => {
-					if (token === undefined) return null
+					if (token === undefined || token.chain === undefined)
+						return null
 
 					return (
 						<div
@@ -80,8 +82,17 @@ export const Tokens: FC<PropsWithChildren> = () => {
 							/>
 							<span className="flex flex-col">
 								{token.symbol}
-								<span className="text-xs opacity-60">
-									{token.chainName}
+								<span className="flex items-center justify-center">
+									<Image
+										src={chainImage(token.chain)}
+										alt="Ethereum"
+										className="mr-2 h-3 w-3 rounded-full"
+										width={16}
+										height={16}
+									/>
+									<span className="text-xs opacity-60">
+										{token.chainName}
+									</span>
 								</span>
 							</span>
 							<span className="ml-auto opacity-60">

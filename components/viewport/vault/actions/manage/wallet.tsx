@@ -6,6 +6,8 @@ import {
 	useState
 } from "react"
 
+import Image from "next/image"
+
 import {
 	useAccount,
 	useBalance,
@@ -22,6 +24,7 @@ import {
 
 import {
 	blockExplorerAddress,
+	chainImage,
 	chains,
 	formatName,
 	truncateBalance
@@ -66,7 +69,7 @@ export const Wallet: FC<PropsWithChildren> = () => {
 	if (!address) return null
 
 	return (
-		<div className="mt-[-46px] h-screen w-[360px] text-center">
+		<div className="mt-[-46px] h-screen w-[360px]">
 			<div className="m-auto mt-[46px] flex w-full py-16 text-center text-white">
 				<h1 className="mx-auto flex flex-row text-4xl">
 					{balance} <span className="ml-2 opacity-60">{symbol}</span>
@@ -141,11 +144,20 @@ export const Wallet: FC<PropsWithChildren> = () => {
 										onClick={() =>
 											switchNetwork(Number(id))
 										}
-										className={`text-md group pointer-events-auto mt-auto flex h-full h-min w-full items-center justify-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950 ${
+										className={`text-md group pointer-events-auto mt-auto flex h-full h-min w-full items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950 ${
 											active ? "active" : ""
 										}`}
 									>
-										{formatName(name)}
+										<Image
+											src={chainImage(id)}
+											alt="Ethereum"
+											className="mr-2 h-4 w-4 rounded-full"
+											width={16}
+											height={16}
+										/>
+										<span className="opacity-60">
+											{formatName(name)}
+										</span>
 									</button>
 								)
 							})}
