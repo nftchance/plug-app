@@ -17,6 +17,7 @@ export const useTokens = ({
 }) => {
 	const typedAddress = tokenAddress as `0x${string}`
 
+	// * This is only going to be able to retrieve information on the chain the client is connected to.
 	const { data } = useContractReads({
 		allowFailure: true,
 		contracts: [
@@ -81,11 +82,40 @@ export const useTokens = ({
 
 	const tokens = useMemo(() => {
 		const staticTokens = TOKENS.filter(token => token.chainId === chainId)
+			.filter(token => {
+				if (tokenAddress === undefined) return true
+
+				if (isAddress(tokenAddress))
+					return token.address === tokenAddress
+
+				return (
+					token.name
+						.toLowerCase()
+						.includes(tokenAddress.toLowerCase()) ||
+					token.symbol
+						.toLowerCase()
+						.includes(tokenAddress.toLowerCase())
+				)
+			})
+			// when the tokenAddress is not an address, we want to sort the tokens by the closest match, which
+			// is the token with the shortest symbol length
+			.sort((a, b) => {
+				if (tokenAddress === undefined) return 0
+				if (isAddress(tokenAddress)) {
+					if (a.symbol < b.symbol) return -1
+					if (a.symbol > b.symbol) return 1
+					return 0
+				}
+
+				if (a.symbol.length < b.symbol.length) return -1
+				if (a.symbol.length > b.symbol.length) return 1
+				return 0
+			})
 
 		if (metadata === undefined) return staticTokens
 
 		return [metadata, ...staticTokens]
-	}, [chainId, metadata])
+	}, [chainId, tokenAddress, metadata])
 
 	return { tokens, metadata }
 }
