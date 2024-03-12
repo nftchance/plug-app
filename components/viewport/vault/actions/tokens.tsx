@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { LoaderCircleIcon } from "lucide-react"
 
 import { useBalances } from "@/contexts/BalancesProvider"
+import { useDomain } from "@/contexts/DomainProvider"
 import { chainImage } from "@/lib/blockchain"
 
 // TODO: When we click on a token on the list we should direct to the withdrawal
@@ -14,6 +15,7 @@ import { chainImage } from "@/lib/blockchain"
 export const Tokens: FC<PropsWithChildren> = () => {
 	const address = "0x62180042606624f02d8a130da8a3171e9b33894d"
 
+	const { handleDomain } = useDomain()
 	const { balances } = useBalances({ address })
 
 	const [index, setIndex] = useState(0)
@@ -65,40 +67,51 @@ export const Tokens: FC<PropsWithChildren> = () => {
 			{balances
 				.filter(token => token?.symbol !== undefined)
 				.map((token, index) => {
-					if (token === undefined || token.chain === undefined)
+					// NOTE: Static reference to chain to avoid Typescript bug where it thinks
+					//		 chain is still undefined even though we checked for it above.
+					const { chain, chainName, balance, symbol, logoURI } = token
+
+					if (
+						chain === undefined ||
+						chainName === undefined ||
+						symbol === undefined
+					)
 						return null
 
 					return (
-						<div
+						<button
 							key={index}
+							onClick={() => {
+								handleDomain(chain)
+							}}
 							className="flex h-min w-full flex-row items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950"
 						>
 							<Image
-								src={token.logoURI ?? ""}
-								alt={token.symbol ?? ""}
+								src={logoURI ?? ""}
+								alt={symbol}
 								className="mr-4 h-6 w-6 rounded-full bg-white/20"
 								width={16}
 								height={16}
 							/>
 							<span className="flex flex-col">
-								{token.symbol}
+								{symbol}
 								<span className="flex items-center justify-center">
 									<Image
-										src={chainImage(token.chain)}
+										src={chainImage(chain)}
 										alt="Ethereum"
 										className="mr-2 h-3 w-3 rounded-full"
 										width={16}
 										height={16}
 									/>
 									<span className="text-xs opacity-60">
-										{token.chainName}
+										{chainName}
 									</span>
 								</span>
 							</span>
 							<span className="ml-auto opacity-60">
-								{token.balance}
+								{balance}
 							</span>
-						</div>
+						</button>
 					)
 				})}
 		</>

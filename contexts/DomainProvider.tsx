@@ -3,11 +3,11 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react"
 
 import { useChainId } from "wagmi"
 
-import { chains, mainnets, testnets } from "@/lib/blockchain"
+import { chains, formatName, mainnets, testnets } from "@/lib/blockchain"
 
 type Domain = {
 	testnets: boolean
-	chain: (typeof chains)[number]
+	chain: (typeof chains)[number] & { name: string }
 	isChoosing: boolean
 }
 
@@ -23,7 +23,7 @@ export const DomainContext = createContext<{
 	accessible: (typeof chains)[number][]
 	chainId: number
 	domain: Domain
-	handleDomain: (domain: Domain) => void
+	handleDomain: (domain: Domain | number) => void
 }>({
 	accessible: chains,
 	chainId: 1,
@@ -44,7 +44,18 @@ export const DomainProvider: FC<PropsWithChildren> = ({ children }) => {
 		return mainnets
 	}, [domain])
 
-	const handleDomain = (domain: Domain) => setDomain(domain)
+	const handleDomain = (domain: Domain | number) => {
+		if (typeof domain === "number") {
+			const chain = chains.find(c => c.id === domain)
+
+			if (!chain) return
+
+			setDomain(domain => ({
+				...domain,
+				chain
+			}))
+		} else setDomain(domain)
+	}
 
 	useEffect(() => {
 		setDomain(domain => ({

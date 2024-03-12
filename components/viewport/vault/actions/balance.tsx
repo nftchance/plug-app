@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useBalances } from "@/contexts/BalancesProvider"
 import { useDomain } from "@/contexts/DomainProvider"
-import { chainImage, chains, formatName } from "@/lib/blockchain"
+import { chainImage, formatName } from "@/lib/blockchain"
 import useTokens from "@/lib/hooks/useTokens"
 
 // TODO: Implement ability to deposit tokens into vault from wallet and in vice versa.
@@ -38,8 +38,6 @@ export const Balance: FC<
 		address,
 		tokenAddress: search.query || search?.asset?.address
 	})
-
-	console.log(search.query, domain.chain.id, tokens)
 
 	return (
 		<div className="flex h-full flex-col">
@@ -92,7 +90,7 @@ export const Balance: FC<
 									className="mr-2 h-4 w-4 rounded-full"
 								/>
 
-								{formatName(chain.name)}
+								{chain.name}
 
 								{chain.id === chainId && (
 									<CheckIcon

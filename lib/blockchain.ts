@@ -7,17 +7,25 @@ import {
 	sepolia
 } from "wagmi/chains"
 
-export const mainnets = [mainnet, base, optimism]
-export const testnets = [sepolia, baseSepolia, optimismSepolia]
-
-export const chains = [...mainnets, ...testnets]
-
 export const formatName = (name: string) => {
 	return name
 		.replace("Mainnet", "")
 		.replace("Testnet", "")
 		.replace("OP", "Optimism")
 }
+
+export const mainnets = [mainnet, base, optimism].map(chain => ({
+	...chain,
+	name: formatName(chain.name)
+}))
+export const testnets = [sepolia, baseSepolia, optimismSepolia].map(chain => ({
+	...chain,
+	name: formatName(chain.name)
+}))
+export const chains = [...mainnets, ...testnets].map(chain => ({
+	...chain,
+	name: formatName(chain.name)
+}))
 
 export const truncateAddress = (address: string) => {
 	return `${address.slice(0, 6)}...${address.slice(-4)}`
