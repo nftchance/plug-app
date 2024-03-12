@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useBalances } from "@/contexts/BalancesProvider"
 import { useDomain } from "@/contexts/DomainProvider"
-import { chains, formatName } from "@/lib/blockchain"
+import { chainImage, chains, formatName } from "@/lib/blockchain"
 import useTokens from "@/lib/hooks/useTokens"
 
 // TODO: Implement ability to deposit tokens into vault from wallet and in vice versa.
@@ -52,6 +52,13 @@ export const Balance: FC<
 				}
 				className="pointer-events-auto flex h-full w-full flex-row items-center justify-center border-b-[1px] border-stone-950 bg-transparent p-4 transition-all duration-200 ease-in-out hover:bg-stone-950"
 			>
+				<Image
+					src={chainImage(domain.chain.id)}
+					alt="Primary network"
+					width={16}
+					height={16}
+					className="mr-2 h-4 w-4 rounded-full"
+				/>
 				{domain.chain.name}
 				<ChevronDownIcon
 					className="ml-auto opacity-60"
@@ -76,6 +83,14 @@ export const Balance: FC<
 								}
 								className="flex h-min w-full flex-row items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white"
 							>
+								<Image
+									src={chainImage(chain.id)}
+									alt={chain.name}
+									width={16}
+									height={16}
+									className="mr-2 h-4 w-4 rounded-full"
+								/>
+
 								{formatName(chain.name)}
 
 								{chain.id === chainId && (
