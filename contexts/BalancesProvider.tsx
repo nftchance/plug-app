@@ -12,6 +12,7 @@ import { useChainId, useBalance as useNativeBalance } from "wagmi"
 
 import { api } from "@/lib/api"
 import { truncateBalance } from "@/lib/blockchain"
+import { useBalance } from "@/lib/hooks/useBalance"
 import { Search } from "@/lib/types/balances"
 
 import { DomainProvider } from "./DomainProvider"
@@ -68,23 +69,28 @@ export const useBalances = ({
 		value: nativeValue
 	} = data ?? {}
 
+	const { metadata } = useBalance({
+		chainId,
+		tokenAddress: search.query || search?.asset?.address,
+		address
+	})
+
 	const { data: balances } = api.account.balances.useQuery(address)
 
 	const decimals = useMemo(() => {
-		if (search.asset) return search.asset.decimals
+		if (metadata) return metadata.decimals
 
 		return nativeDecimals
 	}, [search.asset, nativeSymbol])
 
 	const symbol = useMemo(() => {
-		if (search.asset) return search.asset.symbol
+		if (metadata) return metadata.symbol
 
 		return nativeSymbol
 	}, [search.asset, nativeSymbol])
 
 	const value = useMemo(() => {
-		// TODO: This needs to be implemented.
-		// if (search.asset) return search.asset.value
+		if (metadata) return metadata.balance
 
 		return nativeValue
 	}, [search.asset, nativeSymbol])

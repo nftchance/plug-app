@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useBalances } from "@/contexts/BalancesProvider"
 import { useDomain } from "@/contexts/DomainProvider"
-import { chainImage, formatName } from "@/lib/blockchain"
+import { chainImage } from "@/lib/blockchain"
 import useTokens from "@/lib/hooks/useTokens"
 
 // TODO: Implement ability to deposit tokens into vault from wallet and in vice versa.
