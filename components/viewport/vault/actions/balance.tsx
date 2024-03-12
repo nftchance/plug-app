@@ -22,7 +22,7 @@ export const Balance: FC<
 > = ({ direction, action }) => {
 	const address = "0x62180042606624f02d8a130da8a3171e9b33894d"
 
-	const { chainId, domain, handleDomain } = useDomain()
+	const { accessible, chainId, domain, handleDomain } = useDomain()
 
 	const [amount, setAmount] = useState<number>(0)
 
@@ -69,7 +69,7 @@ export const Balance: FC<
 
 			{domain.isChoosing && (
 				<div className="flex max-h-60 flex-col overflow-scroll">
-					{chains.map((chain, index) => {
+					{accessible.map((chain, index) => {
 						if (chain.id === domain.chain.id) return null
 
 						return (
@@ -77,6 +77,7 @@ export const Balance: FC<
 								key={index}
 								onClick={() =>
 									handleDomain({
+										...domain,
 										chain,
 										isChoosing: false
 									})

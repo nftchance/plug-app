@@ -7,14 +7,10 @@ import {
 	sepolia
 } from "wagmi/chains"
 
-export const chains = [
-	mainnet,
-	sepolia,
-	base,
-	baseSepolia,
-	optimism,
-	optimismSepolia
-]
+export const mainnets = [mainnet, base, optimism]
+export const testnets = [sepolia, baseSepolia, optimismSepolia]
+
+export const chains = [...mainnets, ...testnets]
 
 export const formatName = (name: string) => {
 	return name
