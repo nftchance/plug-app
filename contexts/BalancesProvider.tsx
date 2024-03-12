@@ -7,11 +7,14 @@ import {
 	useState
 } from "react"
 
+import { VaultProvider } from "."
 import { useChainId, useBalance as useNativeBalance } from "wagmi"
 
 import { api } from "@/lib/api"
 import { truncateBalance } from "@/lib/blockchain"
 import { Search } from "@/lib/types/balances"
+
+import { DomainProvider } from "./DomainProvider"
 
 const INITIAL_SEARCH: Search = {
 	query: "",
@@ -30,14 +33,18 @@ export const BalancesProvider: FC<PropsWithChildren> = ({ children }) => {
 	const handleSearch = useCallback((search: Search) => setSearch(search), [])
 
 	return (
-		<BalancesContext.Provider
-			value={{
-				search,
-				handleSearch
-			}}
-		>
-			{children}
-		</BalancesContext.Provider>
+		<VaultProvider>
+			<DomainProvider>
+				<BalancesContext.Provider
+					value={{
+						search,
+						handleSearch
+					}}
+				>
+					{children}
+				</BalancesContext.Provider>
+			</DomainProvider>
+		</VaultProvider>
 	)
 }
 

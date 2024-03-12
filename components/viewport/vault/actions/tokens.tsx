@@ -7,9 +7,6 @@ import { LoaderCircleIcon } from "lucide-react"
 
 import { useBalances } from "@/contexts/BalancesProvider"
 
-// TODO: Right now we base everything on their mainnet balance irrespective
-//       of the chain they are on. It should automatically map the proper
-//       chain.
 // TODO: When we click on a token on the list we should direct to the withdrawal
 //       page with the token selected.
 

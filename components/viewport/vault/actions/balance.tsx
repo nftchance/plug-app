@@ -3,10 +3,16 @@ import { useState } from "react"
 
 import Image from "next/image"
 
-import { ArrowRightIcon, ChevronDownIcon } from "@radix-ui/react-icons"
+import {
+	ArrowRightIcon,
+	CheckIcon,
+	ChevronDownIcon
+} from "@radix-ui/react-icons"
 
 import { Input } from "@/components/ui/input"
 import { useBalances } from "@/contexts/BalancesProvider"
+import { useDomain } from "@/contexts/DomainProvider"
+import { chains, formatName } from "@/lib/blockchain"
 import useTokens from "@/lib/hooks/useTokens"
 
 // TODO: Implement ability to deposit tokens into vault from wallet and in vice versa.
@@ -15,6 +21,8 @@ export const Balance: FC<
 	PropsWithChildren & { direction: 1 | -1; action: string }
 > = ({ direction, action }) => {
 	const address = "0x62180042606624f02d8a130da8a3171e9b33894d"
+
+	const { chainId, domain, handleDomain } = useDomain()
 
 	const [amount, setAmount] = useState<number>(0)
 
@@ -26,13 +34,63 @@ export const Balance: FC<
 		})
 
 	const { tokens } = useTokens({
-		chainId: 1,
+		chainId: domain.chain.id,
 		address,
 		tokenAddress: search.query || search?.asset?.address
 	})
 
+	console.log(search.query, domain.chain.id, tokens)
+
 	return (
 		<div className="flex h-full flex-col">
+			<button
+				onClick={() =>
+					handleDomain({
+						...domain,
+						isChoosing: !domain.isChoosing
+					})
+				}
+				className="pointer-events-auto flex h-full w-full flex-row items-center justify-center border-b-[1px] border-stone-950 bg-transparent p-4 transition-all duration-200 ease-in-out hover:bg-stone-950"
+			>
+				{domain.chain.name}
+				<ChevronDownIcon
+					className="ml-auto opacity-60"
+					width={16}
+					height={16}
+				/>
+			</button>
+
+			{domain.isChoosing && (
+				<div className="flex max-h-60 flex-col overflow-scroll">
+					{chains.map((chain, index) => {
+						if (chain.id === domain.chain.id) return null
+
+						return (
+							<button
+								key={index}
+								onClick={() =>
+									handleDomain({
+										chain,
+										isChoosing: false
+									})
+								}
+								className="flex h-min w-full flex-row items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white"
+							>
+								{formatName(chain.name)}
+
+								{chain.id === chainId && (
+									<CheckIcon
+										className="ml-auto opacity-60"
+										width={16}
+										height={16}
+									/>
+								)}
+							</button>
+						)
+					})}
+				</div>
+			)}
+
 			{/* 
 				TODO: There is a small amount of spacing that is not being handled here
 				      that is only visible when you hover on the amount input.
@@ -68,51 +126,55 @@ export const Balance: FC<
 				</button>
 			</div>
 
-			{search.isSearching && (
-				<div className="flex flex-col">
-					<Input
-						name="asset"
-						type="text"
-						placeholder={`TOKEN${
-							tokens.length > 1 ? " NAME OR" : ""
-						} ADDRESS`}
-						autoComplete="off"
-						value={search.query}
-						onChange={e => {
-							handleSearch({
-								...search,
-								query: e.target.value
-							})
-						}}
-						className="relative w-full border-b-[1px] border-stone-950 bg-transparent py-8 uppercase text-white outline-none hover:bg-stone-950"
-					/>
+			<div className="flex flex-col">
+				{search.isSearching && (
+					<>
+						<Input
+							name="asset"
+							type="text"
+							placeholder={`TOKEN${
+								tokens.length > 1 ? " NAME OR" : ""
+							} ADDRESS`}
+							autoComplete="off"
+							value={search.query}
+							onChange={e => {
+								handleSearch({
+									...search,
+									query: e.target.value
+								})
+							}}
+							className="relative w-full border-b-[1px] border-stone-950 bg-transparent py-8 uppercase text-white outline-none hover:bg-stone-950"
+						/>
 
-					{tokens && tokens.length > 0 ? (
-						<div className="flex max-h-60 flex-col overflow-scroll">
-							{tokens.map((asset, index) => (
-								<button
-									key={index}
-									onClick={() => {
-										handleSearch({
-											query: "",
-											isSearching: false,
-											asset
-										})
-									}}
-									className="flex h-min w-full flex-row items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950"
-								>
-									<Image
-										src={asset.logoURI}
-										alt={asset.name}
-										className="mr-4 h-5 w-5"
-									/>
-									{asset.symbol}
-								</button>
-							))}
-						</div>
-					) : null}
-				</div>
-			)}
+						{tokens && tokens.length > 0 ? (
+							<div className="flex max-h-60 flex-col overflow-scroll">
+								{tokens.map((asset, index) => (
+									<button
+										key={index}
+										onClick={() => {
+											handleSearch({
+												query: "",
+												isSearching: false,
+												asset
+											})
+										}}
+										className="flex h-min w-full flex-row items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950"
+									>
+										<Image
+											src={asset.logoURI}
+											alt={asset.name}
+											className="mr-4 h-5 w-5"
+											width={16}
+											height={16}
+										/>
+										{asset.symbol}
+									</button>
+								))}
+							</div>
+						) : null}
+					</>
+				)}
+			</div>
 
 			<div className="mx-auto mt-auto flex w-full flex-col">
 				<p className="mx-auto my-4 flex flex-row items-center">

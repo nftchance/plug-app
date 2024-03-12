@@ -3,6 +3,8 @@
 import type { FC, PropsWithChildren } from "react"
 import { createContext, useCallback, useContext, useState } from "react"
 
+import { WalletProvider } from "."
+
 import { Vault } from "@/lib/types/vault"
 
 export const VaultContext = createContext<{
@@ -53,17 +55,19 @@ export const VaultProvider: FC<PropsWithChildren> = ({ children }) => {
 	}, [])
 
 	return (
-		<VaultContext.Provider
-			value={{
-				vault,
-				vaults,
-				handleVaultDeploy,
-				handleVaultName,
-				handleVaultSelect
-			}}
-		>
-			{children}
-		</VaultContext.Provider>
+		<WalletProvider>
+			<VaultContext.Provider
+				value={{
+					vault,
+					vaults,
+					handleVaultDeploy,
+					handleVaultName,
+					handleVaultSelect
+				}}
+			>
+				{children}
+			</VaultContext.Provider>
+		</WalletProvider>
 	)
 }
 
