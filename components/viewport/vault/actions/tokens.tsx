@@ -11,6 +11,13 @@ import { useDomain } from "@/contexts/DomainProvider"
 import { chainImage } from "@/lib/blockchain"
 import { formatNumber } from "@/lib/utils"
 
+// TODO: After updating the asset to be cleared when the domain changes, the redirect
+//       to the withdraw and deposit panel do not represent the token anymore as it has
+//       been cleared. This is a bug that needs to be fixed.
+//		 NOTE: It actually appears to have been broken by something else, though I am not
+//			   sure what else it could have been at this stage as it was just working
+//			   as intended.
+
 export const Tokens: FC<PropsWithChildren> = () => {
 	const address = "0x62180042606624f02d8a130da8a3171e9b33894d"
 

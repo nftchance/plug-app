@@ -1,3 +1,4 @@
+import { TOKENS } from "./tokens"
 import {
 	base,
 	baseSepolia,
@@ -90,7 +91,11 @@ export const chainImage = (chainId: number) => {
 }
 
 export const nativeAssetImage = (chainId: number) => {
-	if (chainId === 1 || chainId === 11155111) {
-	}
-	return "https://assets.smold.app/api/token/1/0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE/logo-128.png"
+	const nativeAddress = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+
+	return TOKENS.find(
+		token =>
+			token.address.toLowerCase() === nativeAddress.toLowerCase() &&
+			token.chainId === chainId
+	)?.logoURI
 }
