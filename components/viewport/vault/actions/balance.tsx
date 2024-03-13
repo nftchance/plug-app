@@ -12,8 +12,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { useBalances } from "@/contexts/BalancesProvider"
 import { useDomain } from "@/contexts/DomainProvider"
-import { chainImage } from "@/lib/blockchain"
-import useTokens from "@/lib/hooks/useTokens"
+import { chainImage, nativeAssetImage } from "@/lib/blockchain"
+import { useTokens } from "@/lib/hooks/useTokens"
+import { formatNumber } from "@/lib/utils"
 
 // TODO: Implement ability to deposit tokens into vault from wallet and in vice versa.
 
@@ -26,17 +27,24 @@ export const Balance: FC<
 
 	const [amount, setAmount] = useState<number>(0)
 
-	const { search, symbol, preBalance, postBalance, handleSearch } =
-		useBalances({
-			address,
-			direction,
-			amount
-		})
+	const {
+		search,
+		debouncedSearch,
+		symbol,
+		preBalance,
+		postBalance,
+		handleSearch
+	} = useBalances({
+		address,
+		direction,
+		amount
+	})
 
-	const { tokens } = useTokens({
+	const { all, tokens } = useTokens({
 		chainId: domain.chain.id,
 		address,
-		tokenAddress: search.query || search?.asset?.address
+		query: debouncedSearch.query,
+		asset: search?.asset
 	})
 
 	return (
@@ -129,9 +137,18 @@ export const Balance: FC<
 							isSearching: !search.isSearching
 						})
 					}}
-					className="pointer-events-auto flex h-full w-min flex-row items-center justify-center border-l-[1px] border-stone-950 bg-transparent p-4 transition-all duration-200 ease-in-out hover:bg-stone-950"
+					className="flex h-full flex-row items-center justify-center border-l-[1px] border-stone-950 bg-transparent p-4 transition-all duration-200 ease-in-out hover:bg-stone-950"
 				>
-					{symbol}
+					<Image
+						src={
+							search?.asset?.logoURI ?? nativeAssetImage(chainId)
+						}
+						alt={search?.asset?.name ?? ""}
+						className="mr-4 rounded-full"
+						width={16}
+						height={16}
+					/>
+					{search?.asset?.symbol ?? symbol}
 					<ChevronDownIcon
 						className="ml-4 opacity-60"
 						width={16}
@@ -147,7 +164,7 @@ export const Balance: FC<
 							name="asset"
 							type="text"
 							placeholder={`TOKEN${
-								tokens.length > 1 ? " NAME OR" : ""
+								all.length > 0 ? " NAME OR" : ""
 							} ADDRESS`}
 							autoComplete="off"
 							value={search.query}
@@ -177,7 +194,7 @@ export const Balance: FC<
 										<Image
 											src={asset.logoURI}
 											alt={asset.name}
-											className="mr-4 h-5 w-5"
+											className="mr-4 h-5 w-5 rounded-full"
 											width={16}
 											height={16}
 										/>
@@ -190,7 +207,7 @@ export const Balance: FC<
 				)}
 			</div>
 
-			{/* TODO: Send to vault or withdraw to self maybe */}
+			{/* TODO: Send to vault or withdraw to self maybe
 			{direction == -1 && (
 				<div className="flex flex-row items-center justify-center border-b-[1px] border-stone-950">
 					<Input
@@ -203,18 +220,22 @@ export const Balance: FC<
 						className="h-full w-full bg-transparent p-4 uppercase outline-none hover:bg-stone-950"
 					/>
 				</div>
-			)}
+			)}*/}
 
 			<div className="mx-auto mt-auto flex w-full flex-col">
 				<p className="mx-auto my-4 flex flex-row items-center">
-					{preBalance.toString()}{" "}
+					<span className="tabular-nums">
+						{formatNumber(preBalance)}{" "}
+					</span>
 					<span className="ml-2 opacity-60">${symbol}</span>
 					<ArrowRightIcon
 						className="mx-4 opacity-60"
 						width={16}
 						height={16}
 					/>
-					{postBalance.toString()}{" "}
+					<span className="tabular-nums">
+						{formatNumber(postBalance)}{" "}
+					</span>
 					<span className="ml-2 opacity-60">${symbol}</span>
 				</p>
 

@@ -5,18 +5,20 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 import { LoaderCircleIcon } from "lucide-react"
 
+import { useTabs } from "@/contexts"
 import { useBalances } from "@/contexts/BalancesProvider"
 import { useDomain } from "@/contexts/DomainProvider"
 import { chainImage } from "@/lib/blockchain"
+import { formatNumber } from "@/lib/utils"
 
-// TODO: When we click on a token on the list we should direct to the withdrawal
-//       page with the token selected.
+// TODO: Show the ETH balances of each chain in the token lists.
 
 export const Tokens: FC<PropsWithChildren> = () => {
 	const address = "0x62180042606624f02d8a130da8a3171e9b33894d"
 
+	const { handlePane } = useTabs()
 	const { handleDomain } = useDomain()
-	const { balances } = useBalances({ address })
+	const { search, balances, handleSearch } = useBalances({ address })
 
 	const [index, setIndex] = useState(0)
 
@@ -67,14 +69,25 @@ export const Tokens: FC<PropsWithChildren> = () => {
 			{balances
 				.filter(token => token?.symbol !== undefined)
 				.map((token, index) => {
-					// NOTE: Static reference to chain to avoid Typescript bug where it thinks
+					// NOTE: Static reference to avoid Typescript bug where it thinks
 					//		 chain is still undefined even though we checked for it above.
-					const { chain, chainName, balance, symbol, logoURI } = token
+					const {
+						chain,
+						chainName,
+						name,
+						balance,
+						symbol,
+						logoURI,
+						decimals
+					} = token
 
 					if (
+						address === undefined ||
+						name === undefined ||
 						chain === undefined ||
 						chainName === undefined ||
-						symbol === undefined
+						symbol === undefined ||
+						decimals === undefined
 					)
 						return null
 
@@ -83,6 +96,18 @@ export const Tokens: FC<PropsWithChildren> = () => {
 							key={index}
 							onClick={() => {
 								handleDomain(chain)
+								handleSearch({
+									...search,
+									asset: {
+										address: token?.address ?? "",
+										name,
+										symbol,
+										logoURI: logoURI ?? "",
+										decimals,
+										chainId: chain
+									}
+								})
+								handlePane("withdraw")
 							}}
 							className="flex h-min w-full flex-row items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950"
 						>
@@ -93,7 +118,7 @@ export const Tokens: FC<PropsWithChildren> = () => {
 								width={16}
 								height={16}
 							/>
-							<span className="flex flex-col">
+							<span className="flex flex-col items-start">
 								{symbol}
 								<span className="flex items-center justify-center">
 									<Image
@@ -109,7 +134,7 @@ export const Tokens: FC<PropsWithChildren> = () => {
 								</span>
 							</span>
 							<span className="ml-auto opacity-60">
-								{balance}
+								{formatNumber(balance)}
 							</span>
 						</button>
 					)

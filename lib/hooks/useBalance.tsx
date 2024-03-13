@@ -1,8 +1,8 @@
 import { useMemo } from "react"
 
 import { isAddress } from "viem"
-import { useReadContracts } from "wagmi"
 import { erc20Abi } from "viem"
+import { useReadContracts } from "wagmi"
 
 import { TOKENS } from "@/lib/tokens"
 
@@ -47,6 +47,8 @@ export const useBalance = ({
 	const metadata = useMemo(() => {
 		const [name, symbol, decimals, balance] =
 			(isAddress(typedAddress) && data) || []
+
+		console.log(data)
 
 		if (tokenAddress === undefined) return undefined
 

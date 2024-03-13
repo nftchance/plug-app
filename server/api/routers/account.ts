@@ -6,13 +6,16 @@ import { TRPCError } from "@trpc/server"
 
 import { TOKENS } from "@/lib/tokens"
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
-import { NetworkSchema } from "@/server/schemas"
 
-// TODO: Right now we are making the assumption that it is on mainnet. Need to
-//       go ahead and make sure that we also support other networks.
 // TODO: Right now we only show tokens that we have in our official token list,
 //       this should be updated so that users can import tokens that they may
 //       need, but that we do not have metadata for.
+
+const networks = [
+	Network.ETH_MAINNET,
+	Network.OPT_MAINNET,
+	Network.BASE_MAINNET
+]
 
 const getChainId = (chain: Network) => {
 	switch (chain) {
@@ -20,6 +23,8 @@ const getChainId = (chain: Network) => {
 			return 1
 		case Network.OPT_MAINNET:
 			return 10
+		case Network.BASE_MAINNET:
+			return 8453
 		default:
 			return 1
 	}
@@ -31,6 +36,8 @@ const getChainName = (chain: Network) => {
 			return "Ethereum"
 		case Network.OPT_MAINNET:
 			return "Optimism"
+		case Network.BASE_MAINNET:
+			return "Base"
 		default:
 			return "Ethereum"
 	}
@@ -45,9 +52,20 @@ const getBalancesForChain = async (address: string, chain: Network) => {
 		network: chain
 	})
 
+	const balance = await alchemy.core.getBalance(address)
 	const { tokenBalances } = await alchemy.core.getTokenBalances(address)
 
-	return tokenBalances
+	const balances = [
+		{
+			contractAddress: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+			chain: chainId,
+			chainName,
+			tokenBalance: balance
+		},
+		...tokenBalances
+	]
+
+	return balances
 		.map(token => {
 			const { contractAddress, tokenBalance } = token
 
@@ -85,10 +103,7 @@ const getBalancesForChain = async (address: string, chain: Network) => {
 		}))
 }
 
-const getBalances = async (
-	address: string,
-	chains: Array<Network> = [Network.ETH_MAINNET, Network.OPT_MAINNET]
-) => {
+const getBalances = async (address: string, chains = networks) => {
 	const balances = await Promise.all(
 		chains.map(chain => getBalancesForChain(address, chain))
 	)

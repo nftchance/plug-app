@@ -37,7 +37,8 @@ export const truncateBalance = (
 ) => {
 	if (!value || !decimals) return 0
 
-	return (Number(value) / 10 ** Number(decimals)).toFixed(2)
+	// NOTE: Four decimal places with complete series of trailing zeroes removed.
+	return parseFloat((Number(value) / 10 ** Number(decimals)).toFixed(4))
 }
 
 export const blockExplorerUrl = (chainId: number) => {
@@ -86,4 +87,10 @@ export const chainImage = (chainId: number) => {
 		default:
 			return "/blockchain/ethereum.png"
 	}
+}
+
+export const nativeAssetImage = (chainId: number) => {
+	if (chainId === 1 || chainId === 11155111) {
+	}
+	return "https://assets.smold.app/api/token/1/0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE/logo-128.png"
 }

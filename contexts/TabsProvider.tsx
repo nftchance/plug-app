@@ -25,7 +25,7 @@ type Tab = {
 
 const ephemeralTabs: string[] = ["/canvas/create", "/canvas/templates"]
 
-const INITIAL_PANE = "deposit"
+const INITIAL_PANE = "tokens"
 
 export const TabsContext = createContext<{
 	pane: string
