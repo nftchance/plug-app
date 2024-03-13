@@ -11,14 +11,15 @@ import { useDomain } from "@/contexts/DomainProvider"
 import { chainImage } from "@/lib/blockchain"
 import { formatNumber } from "@/lib/utils"
 
-// TODO: Show the ETH balances of each chain in the token lists.
-
 export const Tokens: FC<PropsWithChildren> = () => {
 	const address = "0x62180042606624f02d8a130da8a3171e9b33894d"
 
 	const { handlePane } = useTabs()
-	const { handleDomain } = useDomain()
-	const { search, balances, handleSearch } = useBalances({ address })
+	const { domain, handleDomain } = useDomain()
+	const { search, balances, handleSearch } = useBalances({
+		chainId: domain.chain.id,
+		address
+	})
 
 	const [index, setIndex] = useState(0)
 
