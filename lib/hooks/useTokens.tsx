@@ -85,8 +85,12 @@ export const useTokens = ({
 			.filter(token => {
 				if (tokenAddress === undefined) return true
 
-				if (isAddress(tokenAddress))
-					return token.address === tokenAddress
+				if (isAddress(tokenAddress)) {
+					const found = token.address === tokenAddress
+
+					if (found === true && metadata === undefined) return true
+					return false
+				}
 
 				return (
 					token.name
