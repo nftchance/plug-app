@@ -93,9 +93,13 @@ export const chainImage = (chainId: number) => {
 export const nativeAssetImage = (chainId: number) => {
 	const nativeAddress = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
 
-	return TOKENS.find(
+	const nativeImage = TOKENS.find(
 		token =>
 			token.address.toLowerCase() === nativeAddress.toLowerCase() &&
 			token.chainId === chainId
 	)?.logoURI
+
+	if (nativeImage) return nativeImage
+
+	return `https://assets.smold.app/api/token/1/${nativeAddress}/logo-128.png`
 }
