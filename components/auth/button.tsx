@@ -2,9 +2,10 @@
 
 import type { FC, PropsWithChildren } from "react"
 
+import Image from "next/image"
+
 import { getCsrfToken, signIn } from "next-auth/react"
 
-import BlockiesSvg from "blockies-react-svg"
 import { AnimatePresence } from "framer-motion"
 import { motion } from "framer-motion"
 import {
@@ -125,7 +126,7 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = ({
 							rel="noopener noreferrer"
 						>
 							{name && avatar ? (
-								<img
+								<Image
 									src={avatar}
 									alt={name}
 									className="h-5 w-5 rounded-full"
