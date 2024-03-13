@@ -6,6 +6,9 @@ import { erc20ABI } from "wagmi"
 
 import { TOKENS } from "@/lib/tokens"
 
+// TODO: If you change chains in the middle of the process we could serve you
+//		 the wrong asset address.
+
 export const useTokens = ({
 	chainId,
 	tokenAddress,
@@ -17,7 +20,7 @@ export const useTokens = ({
 }) => {
 	const typedAddress = tokenAddress as `0x${string}`
 
-	// * This is only going to be able to retrieve information on the chain the client is connected to.
+	// NOTE: This is only going to be able to retrieve information on the chain the client is connected to.
 	const { data } = useContractReads({
 		allowFailure: true,
 		contracts: [
