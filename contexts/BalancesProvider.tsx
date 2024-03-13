@@ -3,6 +3,7 @@ import {
 	createContext,
 	useCallback,
 	useContext,
+	useEffect,
 	useMemo,
 	useState
 } from "react"
@@ -59,18 +60,18 @@ export const BalancesProvider: FC<PropsWithChildren> = ({ children }) => {
 }
 
 export const useBalances = ({
+	chainId,
 	address,
 	direction,
 	amount
 }: {
+	chainId: number
 	address: `0x${string}`
 	direction?: 1 | -1
 	amount?: number
 }) => {
 	const { search, debouncedSearch, handleSearch } =
 		useContext(BalancesContext)
-
-	const chainId = useChainId()
 
 	const { data } = useNativeBalance({ address, chainId })
 	const {
@@ -124,6 +125,13 @@ export const useBalances = ({
 			truncateBalance(value ? value + amountBigInt : BigInt(0), decimals),
 		[amountBigInt, value, decimals]
 	)
+
+	// NOTE: When the chain is changed, the asset being searched is no longer within
+	//       context so we need to clear it to prevent the user from attempting to
+	//       run a transaction for a token that does not actually exist.
+	useEffect(() => {
+		handleSearch({ ...search, asset: undefined })
+	}, [chainId])
 
 	return {
 		chainId,

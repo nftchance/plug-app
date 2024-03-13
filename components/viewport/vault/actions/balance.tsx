@@ -16,6 +16,8 @@ import { chainImage, nativeAssetImage } from "@/lib/blockchain"
 import { useTokens } from "@/lib/hooks/useTokens"
 import { formatNumber } from "@/lib/utils"
 
+// TODO: Use the balance that the account holds as they got here through the useBalances() hook
+//       otherwise the balance is safe to be assumed as zero.
 // TODO: Implement ability to deposit tokens into vault from wallet and in vice versa.
 
 export const Balance: FC<
@@ -35,6 +37,7 @@ export const Balance: FC<
 		postBalance,
 		handleSearch
 	} = useBalances({
+		chainId: domain.chain.id,
 		address,
 		direction,
 		amount
