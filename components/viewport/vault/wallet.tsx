@@ -3,13 +3,14 @@ import { FC, PropsWithChildren, useMemo } from "react"
 import BlockiesSvg from "blockies-react-svg"
 import { useAccount, useEnsName } from "wagmi"
 
-import { CaretDownIcon } from "@radix-ui/react-icons"
+import { useWeb3Modal } from "@web3modal/wagmi/react"
 
 import { useTabs } from "@/contexts"
 
 export const Wallet: FC<PropsWithChildren> = () => {
 	const { pane, handlePane } = useTabs()
 
+	const { open } = useWeb3Modal()
 	const { address } = useAccount()
 	const { data: name } = useEnsName({ address })
 
@@ -24,7 +25,11 @@ export const Wallet: FC<PropsWithChildren> = () => {
 	return (
 		<>
 			<button
-				onClick={() => handlePane(focused ? undefined : "wallet")}
+				onClick={() =>
+					address
+						? handlePane(focused ? undefined : "wallet")
+						: open()
+				}
 				className={`flex h-full flex-row items-center justify-center border-l-[1px] border-stone-950 px-8 text-sm text-white/60 hover:bg-stone-950 active:bg-white active:text-stone-950 ${
 					focused ? "active" : ""
 				}`}

@@ -1,8 +1,8 @@
 import { useMemo } from "react"
 
 import { isAddress } from "viem"
-import { useContractReads } from "wagmi"
-import { erc20ABI } from "wagmi"
+import { useReadContracts } from "wagmi"
+import { erc20Abi } from "viem"
 
 import { TOKENS } from "@/lib/tokens"
 
@@ -17,27 +17,27 @@ export const useBalance = ({
 }) => {
 	const typedAddress = tokenAddress as `0x${string}`
 
-	const { data } = useContractReads({
+	const { data } = useReadContracts({
 		allowFailure: true,
 		contracts: [
 			{
 				address: typedAddress,
-				abi: erc20ABI,
+				abi: erc20Abi,
 				functionName: "name"
 			},
 			{
 				address: typedAddress,
-				abi: erc20ABI,
+				abi: erc20Abi,
 				functionName: "symbol"
 			},
 			{
 				address: typedAddress,
-				abi: erc20ABI,
+				abi: erc20Abi,
 				functionName: "decimals"
 			},
 			{
 				address: typedAddress,
-				abi: erc20ABI,
+				abi: erc20Abi,
 				functionName: "balanceOf",
 				args: [address]
 			}

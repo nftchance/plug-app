@@ -1,8 +1,7 @@
 import { useMemo } from "react"
 
-import { isAddress } from "viem"
-import { useContractReads } from "wagmi"
-import { erc20ABI } from "wagmi"
+import { erc20Abi, isAddress } from "viem"
+import { useReadContracts } from "wagmi"
 
 import { TOKENS } from "@/lib/tokens"
 
@@ -21,27 +20,27 @@ export const useTokens = ({
 	const typedAddress = tokenAddress as `0x${string}`
 
 	// NOTE: This is only going to be able to retrieve information on the chain the client is connected to.
-	const { data } = useContractReads({
+	const { data } = useReadContracts({
 		allowFailure: true,
 		contracts: [
 			{
 				address: typedAddress,
-				abi: erc20ABI,
+				abi: erc20Abi,
 				functionName: "name"
 			},
 			{
 				address: typedAddress,
-				abi: erc20ABI,
+				abi: erc20Abi,
 				functionName: "symbol"
 			},
 			{
 				address: typedAddress,
-				abi: erc20ABI,
+				abi: erc20Abi,
 				functionName: "decimals"
 			},
 			{
 				address: typedAddress,
-				abi: erc20ABI,
+				abi: erc20Abi,
 				functionName: "balanceOf",
 				args: [address]
 			}

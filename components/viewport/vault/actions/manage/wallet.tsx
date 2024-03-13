@@ -8,7 +8,7 @@ import {
 
 import Image from "next/image"
 
-import { useAccount, useBalance, useDisconnect, useSwitchNetwork } from "wagmi"
+import { useAccount, useBalance, useDisconnect, useSwitchChain } from "wagmi"
 
 import {
 	ExclamationTriangleIcon,
@@ -29,7 +29,7 @@ export const Wallet: FC<PropsWithChildren> = () => {
 
 	const { accessible, chainId, domain, handleDomain } = useDomain()
 
-	const { switchNetwork } = useSwitchNetwork()
+	const { switchChain } = useSwitchChain()
 	const { disconnect } = useDisconnect()
 
 	const { data } = useBalance({ address, chainId: 1 })
@@ -119,31 +119,32 @@ export const Wallet: FC<PropsWithChildren> = () => {
 
 			<div className="flex w-full flex-col">
 				<div className="mb-auto">
-					{switchNetwork &&
-						accessible.map(({ id, name }) => {
-							const active = chainId === Number(id)
+					{accessible.map(({ id, name }) => {
+						const active = chainId === Number(id)
 
-							return (
-								<button
-									key={id}
-									onClick={() => switchNetwork(Number(id))}
-									className={`text-md group pointer-events-auto mt-auto flex h-full h-min w-full items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950 ${
-										active ? "active" : ""
-									}`}
-								>
-									<Image
-										src={chainImage(id)}
-										alt="Ethereum"
-										className="mr-2 h-4 w-4 rounded-full"
-										width={16}
-										height={16}
-									/>
-									<span className="opacity-60">
-										{formatName(name)}
-									</span>
-								</button>
-							)
-						})}
+						return (
+							<button
+								key={id}
+								onClick={() =>
+									switchChain({ chainId: Number(id) })
+								}
+								className={`text-md group pointer-events-auto mt-auto flex h-full h-min w-full items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950 ${
+									active ? "active" : ""
+								}`}
+							>
+								<Image
+									src={chainImage(id)}
+									alt="Ethereum"
+									className="mr-2 h-4 w-4 rounded-full"
+									width={16}
+									height={16}
+								/>
+								<span className="opacity-60">
+									{formatName(name)}
+								</span>
+							</button>
+						)
+					})}
 				</div>
 			</div>
 		</div>

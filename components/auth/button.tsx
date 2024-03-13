@@ -16,9 +16,9 @@ import {
 import { SiweMessage } from "siwe"
 import {
 	useAccount,
+	useChainId,
 	useEnsAvatar,
 	useEnsName,
-	useNetwork,
 	useSignMessage
 } from "wagmi"
 
@@ -35,9 +35,10 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = ({
 }) => {
 	const { open } = useWeb3Modal()
 	const { address, isConnected } = useAccount()
-	const { chain } = useNetwork()
+	const chainId = useChainId()
 	const { data: name } = useEnsName({ address })
-	const { data: avatar } = useEnsAvatar({ name })
+	// TODO: Fix the name retrieval.
+	const { data: avatar } = useEnsAvatar({ name: 'nftchance.eth' })
 
 	const { error, signMessageAsync, isLoading, isError } = useSignMessage()
 
@@ -56,7 +57,7 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = ({
 				}.`,
 				uri: window.location.origin,
 				version: "1",
-				chainId: chain?.id,
+				chainId: chainId,
 				nonce: await getCsrfToken()
 			})
 			const signature = await signMessageAsync({
