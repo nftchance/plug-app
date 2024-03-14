@@ -45,6 +45,9 @@ export const Balance: FC<
 		amount
 	})
 
+	console.log("on balance")
+	console.log(search)
+
 	const { all, tokens } = useTokens({
 		chainId: domain.chain.id,
 		address,

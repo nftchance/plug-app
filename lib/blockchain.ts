@@ -1,4 +1,4 @@
-import { TOKENS } from "./tokens"
+import { NATIVE_TOKEN_ADDRESS, TOKENS } from "./tokens"
 import {
 	base,
 	baseSepolia,
@@ -91,7 +91,7 @@ export const chainImage = (chainId: number) => {
 }
 
 export const nativeAssetImage = (chainId: number) => {
-	const nativeAddress = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+	const nativeAddress = NATIVE_TOKEN_ADDRESS
 
 	const nativeImage = TOKENS.find(
 		token =>

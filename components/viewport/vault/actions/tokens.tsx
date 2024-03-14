@@ -28,6 +28,8 @@ export const Tokens: FC<PropsWithChildren> = () => {
 		address
 	})
 
+	console.log(search)
+
 	const [index, setIndex] = useState(0)
 
 	const dots = useMemo(() => {
@@ -80,7 +82,7 @@ export const Tokens: FC<PropsWithChildren> = () => {
 					// NOTE: Static reference to avoid Typescript bug where it thinks
 					//		 chain is still undefined even though we checked for it above.
 					const {
-						chain,
+						chain: chainId,
 						chainName,
 						name,
 						balance,
@@ -92,7 +94,7 @@ export const Tokens: FC<PropsWithChildren> = () => {
 					if (
 						address === undefined ||
 						name === undefined ||
-						chain === undefined ||
+						chainId === undefined ||
 						chainName === undefined ||
 						symbol === undefined ||
 						decimals === undefined
@@ -103,7 +105,8 @@ export const Tokens: FC<PropsWithChildren> = () => {
 						<button
 							key={index}
 							onClick={() => {
-								handleDomain(chain)
+								handleDomain(chainId)
+								handlePane("withdraw")
 								handleSearch({
 									...search,
 									asset: {
@@ -112,10 +115,9 @@ export const Tokens: FC<PropsWithChildren> = () => {
 										symbol,
 										logoURI: logoURI ?? "",
 										decimals,
-										chainId: chain
+										chainId
 									}
 								})
-								handlePane("withdraw")
 							}}
 							className="flex h-min w-full flex-row items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950"
 						>
@@ -130,7 +132,7 @@ export const Tokens: FC<PropsWithChildren> = () => {
 								{symbol}
 								<span className="flex items-center justify-center">
 									<Image
-										src={chainImage(chain)}
+										src={chainImage(chainId)}
 										alt="Ethereum"
 										className="mr-2 h-3 w-3 rounded-full"
 										width={16}

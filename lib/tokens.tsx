@@ -1,3 +1,5 @@
+export const NATIVE_TOKEN_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+
 export const TOKENS = [
 	{
 		address: "0x0000000000085d4780B73119b644AE5ecd22b376",

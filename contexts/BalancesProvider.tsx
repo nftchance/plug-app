@@ -126,13 +126,6 @@ export const useBalances = ({
 		[amountBigInt, value, decimals]
 	)
 
-	// NOTE: When the chain is changed, the asset being searched is no longer within
-	//       context so we need to clear it to prevent the user from attempting to
-	//       run a transaction for a token that does not actually exist.
-	useEffect(() => {
-		handleSearch({ ...search, asset: undefined })
-	}, [chainId])
-
 	return {
 		chainId,
 		address,
