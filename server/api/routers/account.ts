@@ -4,7 +4,9 @@ import { z } from "zod"
 
 import { TRPCError } from "@trpc/server"
 
-import { TOKENS } from "@/lib/tokens"
+import { truncateBalance } from "@/lib/blockchain"
+import { NATIVE_TOKEN_ADDRESS, TOKENS } from "@/lib/tokens"
+import { formatNumber } from "@/lib/utils"
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
 
 // TODO: Right now we only show tokens that we have in our official token list,
@@ -57,7 +59,7 @@ const getBalancesForChain = async (address: string, chain: Network) => {
 
 	const balances = [
 		{
-			contractAddress: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+			contractAddress: NATIVE_TOKEN_ADDRESS,
 			chain: chainId,
 			chainName,
 			tokenBalance: balance
@@ -77,11 +79,9 @@ const getBalancesForChain = async (address: string, chain: Network) => {
 
 			if (!staticToken || tokenBalance === null) return undefined
 
-			const balance = Number(
-				formatUnits(
-					hexToBigInt(tokenBalance as `0x${string}`),
-					staticToken.decimals
-				)
+			const balance = hexToBigInt(tokenBalance as `0x${string}`)
+			const balanceFormatted = formatNumber(
+				truncateBalance(balance, staticToken.decimals)
 			)
 
 			return {
@@ -92,15 +92,12 @@ const getBalancesForChain = async (address: string, chain: Network) => {
 				symbol: staticToken.symbol,
 				decimals: staticToken.decimals,
 				logoURI: staticToken.logoURI,
-				balance
+				balance,
+				balanceFormatted
 			}
 		})
-		.filter(token => (token?.balance ?? 0) !== 0)
-		.sort((a, b) => (b?.balance ?? 0) - (a?.balance ?? 0))
-		.map(token => ({
-			...token,
-			balance: parseFloat(token?.balance?.toFixed(4) ?? "0")
-		}))
+		.filter(token => (token?.balance ?? BigInt(0)) !== BigInt(0))
+		.sort((a, b) => (Number(b?.balance) ?? 0) - (Number(a?.balance) ?? 0))
 }
 
 const getBalances = async (address: string, chains = networks) => {

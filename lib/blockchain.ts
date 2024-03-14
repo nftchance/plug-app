@@ -33,7 +33,7 @@ export const truncateAddress = (address: string) => {
 }
 
 export const truncateBalance = (
-	value: BigInt | bigint | undefined,
+	value: string | BigInt | bigint | undefined,
 	decimals: number | undefined
 ) => {
 	if (!value || !decimals) return 0

@@ -232,18 +232,14 @@ export const Balance: FC<
 
 			<div className="mx-auto mt-auto flex w-full flex-col">
 				<p className="mx-auto my-4 flex flex-row items-center">
-					<span className="tabular-nums">
-						{formatNumber(preBalance)}{" "}
-					</span>
+					<span className="tabular-nums">{preBalance} </span>
 					<span className="ml-2 opacity-60">${symbol}</span>
 					<ArrowRightIcon
 						className="mx-4 opacity-60"
 						width={16}
 						height={16}
 					/>
-					<span className="tabular-nums">
-						{formatNumber(postBalance)}{" "}
-					</span>
+					<span className="tabular-nums">{postBalance} </span>
 					<span className="ml-2 opacity-60">${symbol}</span>
 				</p>
 

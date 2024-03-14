@@ -85,11 +85,11 @@ export const Tokens: FC<PropsWithChildren> = () => {
 						chain: chainId,
 						chainName,
 						name,
-						balance,
 						symbol,
 						logoURI,
-						decimals
-					} = token
+						decimals,
+						balanceFormatted
+					} = token ?? {}
 
 					if (
 						address === undefined ||
@@ -144,7 +144,7 @@ export const Tokens: FC<PropsWithChildren> = () => {
 								</span>
 							</span>
 							<span className="ml-auto opacity-60">
-								{formatNumber(balance)}
+								{balanceFormatted}
 							</span>
 						</button>
 					)

@@ -1,21 +1,16 @@
 import type { FC, PropsWithChildren } from "react"
-import {
-	createContext,
-	useCallback,
-	useContext,
-	useEffect,
-	useMemo,
-	useState
-} from "react"
+import { createContext, useContext, useMemo } from "react"
 
 import { VaultProvider } from "."
-import { useChainId, useBalance as useNativeBalance } from "wagmi"
+import { useBalance as useNativeBalance } from "wagmi"
 
 import { api } from "@/lib/api"
 import { truncateBalance } from "@/lib/blockchain"
 import { useBalance } from "@/lib/hooks/useBalance"
 import { useDebounce } from "@/lib/hooks/useDebounce"
+import { NATIVE_TOKEN_ADDRESS } from "@/lib/tokens"
 import { Search } from "@/lib/types/balances"
+import { formatNumber } from "@/lib/utils"
 
 import { DomainProvider } from "./DomainProvider"
 
@@ -73,38 +68,45 @@ export const useBalances = ({
 	const { search, debouncedSearch, handleSearch } =
 		useContext(BalancesContext)
 
-	const { data } = useNativeBalance({ address, chainId })
-	const {
-		decimals: nativeDecimals,
-		symbol: nativeSymbol,
-		value: nativeValue
-	} = data ?? {}
-
-	const { metadata } = useBalance({
-		chainId,
-		tokenAddress: search.query || search?.asset?.address,
-		address
-	})
-
 	const { data: balances } = api.account.balances.useQuery(address)
 
-	const decimals = useMemo(() => {
-		if (metadata) return metadata.decimals
+	const nativeAsset = useMemo(() => {
+		if (balances === undefined) return undefined
 
-		return nativeDecimals
-	}, [metadata, search.asset, nativeSymbol])
+		return balances.find(
+			balance =>
+				balance?.chain === chainId &&
+				balance?.address === NATIVE_TOKEN_ADDRESS
+		)
+	}, [balances])
+
+	const decimals = useMemo(() => {
+		if (search.asset) return search.asset.decimals
+		if (nativeAsset) return nativeAsset.decimals
+		return 0
+	}, [search.asset, nativeAsset])
 
 	const symbol = useMemo(() => {
-		if (metadata) return metadata.symbol
+		if (search.asset) return search.asset.symbol
+		if (nativeAsset) return nativeAsset.symbol
+		return ""
+	}, [search.asset, nativeAsset])
 
-		return nativeSymbol
-	}, [metadata, search.asset, nativeSymbol])
+	const balance = useMemo(() => {
+		if (balances && search.asset) {
+			const asset = search.asset
+			const tokenBalance = balances.find(
+				balance =>
+					balance?.chain === chainId &&
+					balance?.address === asset.address
+			)
 
-	const value = useMemo(() => {
-		if (metadata) return metadata.balance
+			return tokenBalance?.balance || BigInt(0)
+		}
+		if (nativeAsset) return nativeAsset.balance
 
-		return nativeValue
-	}, [metadata, search.asset, nativeSymbol])
+		return BigInt(0)
+	}, [search.asset, nativeAsset])
 
 	const amountBigInt = useMemo(() => {
 		if (!direction || !decimals) return BigInt(0)
@@ -116,14 +118,19 @@ export const useBalances = ({
 	}, [direction, amount, decimals])
 
 	const preBalance = useMemo(
-		() => truncateBalance(value, decimals),
-		[value, decimals]
+		() => formatNumber(truncateBalance(balance, decimals)),
+		[balance, decimals]
 	)
 
 	const postBalance = useMemo(
 		() =>
-			truncateBalance(value ? value + amountBigInt : BigInt(0), decimals),
-		[amountBigInt, value, decimals]
+			formatNumber(
+				truncateBalance(
+					balance ? balance + amountBigInt : BigInt(0),
+					decimals
+				)
+			),
+		[amountBigInt, balance, decimals]
 	)
 
 	return {
