@@ -10,10 +10,9 @@ import {
 } from "@radix-ui/react-icons"
 
 import { Input } from "@/components/ui/input"
-import { useBalances } from "@/contexts/BalancesProvider"
-import { useDomain } from "@/contexts/DomainProvider"
+import { useBalances, useDomain } from "@/contexts"
 import { chainImage, nativeAssetImage } from "@/lib/blockchain"
-import { useTokens } from "@/lib/hooks/useTokens"
+import { useTokens } from "@/lib/hooks"
 
 // TODO: Need to handle the situation when withdrawing or depositing and the balance held is insufficient.
 // TODO: Need to figure out a way to handle the updates of the tokens that are within context

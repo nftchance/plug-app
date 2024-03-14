@@ -1,15 +1,13 @@
-import { FC, PropsWithChildren, useEffect, useMemo, useState } from "react"
+import type { FC, PropsWithChildren } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import Image from "next/image"
 
 import { motion } from "framer-motion"
 import { LoaderCircleIcon } from "lucide-react"
 
-import { useTabs } from "@/contexts"
-import { useBalances } from "@/contexts/BalancesProvider"
-import { useDomain } from "@/contexts/DomainProvider"
+import { useBalances, useDomain, useTabs } from "@/contexts"
 import { chainImage } from "@/lib/blockchain"
-import { formatNumber } from "@/lib/utils"
 
 // TODO: After updating the asset to be cleared when the domain changes, the redirect
 //       to the withdraw and deposit panel do not represent the token anymore as it has
@@ -27,8 +25,6 @@ export const Tokens: FC<PropsWithChildren> = () => {
 		chainId: domain.chain.id,
 		address
 	})
-
-	console.log(search)
 
 	const [index, setIndex] = useState(0)
 
