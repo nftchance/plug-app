@@ -122,16 +122,16 @@ export const useBalances = ({
 		[balance, decimals]
 	)
 
-	const postBalance = useMemo(
-		() =>
-			formatNumber(
-				truncateBalance(
-					balance ? balance + amountBigInt : BigInt(0),
-					decimals
-				)
-			),
-		[amountBigInt, balance, decimals]
+	const changedBalance = useMemo(
+		() => (balance ?? BigInt(0)) + amountBigInt,
+		[balance, amountBigInt]
 	)
+
+	const postBalance = useMemo(() => {
+		if (changedBalance < BigInt(0)) return "0"
+
+		return formatNumber(truncateBalance(changedBalance, decimals))
+	}, [amountBigInt, balance, decimals])
 
 	return {
 		chainId,

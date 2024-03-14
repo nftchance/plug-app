@@ -105,8 +105,6 @@ export const Tokens: FC<PropsWithChildren> = () => {
 						<button
 							key={index}
 							onClick={() => {
-								handleDomain(chainId)
-								handlePane("withdraw")
 								handleSearch({
 									...search,
 									asset: {
@@ -118,6 +116,8 @@ export const Tokens: FC<PropsWithChildren> = () => {
 										chainId
 									}
 								})
+								handleDomain(chainId)
+								handlePane("withdraw")
 							}}
 							className="flex h-min w-full flex-row items-center border-b-[1px] border-stone-950 p-4 transition-all duration-200 ease-in-out hover:bg-stone-950 hover:text-white active:bg-white active:text-stone-950"
 						>

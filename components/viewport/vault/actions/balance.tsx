@@ -14,12 +14,12 @@ import { useBalances } from "@/contexts/BalancesProvider"
 import { useDomain } from "@/contexts/DomainProvider"
 import { chainImage, nativeAssetImage } from "@/lib/blockchain"
 import { useTokens } from "@/lib/hooks/useTokens"
-import { formatNumber } from "@/lib/utils"
 
-// TODO: Balance changes with preBalance and postBalance do not function correctly when the
-//       amount held is zero.
-// TODO: Use the balance that the account holds as they got here through the useBalances() hook
-//       otherwise the balance is safe to be assumed as zero.
+// TODO: Need to handle the situation when withdrawing or depositing and the balance held is insufficient.
+// TODO: Need to figure out a way to handle the updates of the tokens that are within context
+//       when the token changes as we can have an improperly selected token when the domain changes.
+//       NOTE: Imagine if we have USDC selected on Ethereum, if we change to Base, we may still want
+//             to have USDC selected, but the address and underlying asset will be different.
 // TODO: Implement ability to deposit tokens into vault from wallet and in vice versa.
 
 export const Balance: FC<
@@ -44,9 +44,6 @@ export const Balance: FC<
 		direction,
 		amount
 	})
-
-	console.log("on balance")
-	console.log(search)
 
 	const { all, tokens } = useTokens({
 		chainId: domain.chain.id,
