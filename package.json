@@ -44,7 +44,7 @@
 		"blockies-react-svg": "^0.0.13",
 		"class-variance-authority": "^0.7.0",
 		"classnames": "^2.3.2",
-		"clsx": "^2.0.0",
+		"clsx": "^2.1.0",
 		"cmdk": "^1.0.0",
 		"cross-env": "^7.0.3",
 		"dedent": "^1.5.1",
