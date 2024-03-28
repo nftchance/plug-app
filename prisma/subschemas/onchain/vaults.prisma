@@ -5,24 +5,28 @@ model Address {
 }
 
 model Chain {
-    id String @id
+    id Int @id
 
     vaults Vault[]
 }
 
 model Vault {
-    address String  @id
-    chains  Chain[]
-    
+    address String
+    chain   Chain  @relation(fields: [chainId], references: [id])
+    chainId Int
+
+    name String
+
     lastBlockIndexed Int
-    
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt        DateTime @default(now())
+    updatedAt        DateTime @updatedAt
 
-    adminAddress   Address @relation(fields: [adminAddressId], references: [id])
-    adminAddressId String
+    livePlugs    LivePlugs[]
 
-    livePlugs LivePlugs[]
+    owner        Address     @relation(fields: [ownerAddress], references: [id])
+    ownerAddress String
+
+    @@unique([address, chainId])
 }
 
 model Domain {
@@ -83,18 +87,17 @@ model Plugs {
 }
 
 model LivePlugs {
-    domain            Domain @relation(fields: [verifyingContract, name, version, chainId], references: [verifyingContract, name, version, chainId])
-    verifyingContract String
-    name              String
-    version           String
-    chainId           Int
+    domain Domain @relation(fields: [address, name, version, chainId], references: [verifyingContract, name, version, chainId])
+    vault  Vault  @relation(fields: [address, chainId], references: [address, chainId])
 
-    plugs     Plugs  @relation(fields: [plugsId], references: [id])
-    plugsId   String
+    plugs   Plugs  @relation(fields: [plugsId], references: [id])
+    plugsId String
+
+    name      String
+    version   String
+    chainId   Int
+    address   String
     signature String
-
-    vault   Vault  @relation(fields: [address], references: [address])
-    address String
 
     @@id([plugsId, address])
 }

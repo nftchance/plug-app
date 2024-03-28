@@ -1,6 +1,4 @@
-import { type FC, type PropsWithChildren, useMemo } from "react"
-
-import { useBalance } from "wagmi"
+import { type FC, type PropsWithChildren } from "react"
 
 import {
 	ArchiveIcon,
@@ -11,21 +9,13 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { useTabs, useVaults } from "@/contexts"
-import { truncateBalance } from "@/lib/blockchain"
+import { api } from "@/lib/api"
 
 export const Vault: FC<PropsWithChildren> = () => {
 	const { pane, Panel, handlePane } = useTabs()
-	const { vault, handleVaultName } = useVaults()
+	const { vault } = useVaults()
 
-	const address = "0x62180042606624f02d8a130da8a3171e9b33894d"
-
-	const { data } = useBalance({ address, chainId: 1 })
-	const { decimals, symbol, value } = data ?? {}
-
-	const balance = useMemo(
-		() => truncateBalance(value, decimals),
-		[value, decimals]
-	)
+	const handleVaultName = api.account.vaults.rename.useMutation()
 
 	return (
 		<div className="w-[360px]">
@@ -35,7 +25,12 @@ export const Vault: FC<PropsWithChildren> = () => {
 				placeholder="VAULT NAME"
 				autoComplete="off"
 				value={vault?.name ?? undefined}
-				onChange={e => handleVaultName(e.target.value)}
+				onChange={e =>
+					handleVaultName.mutate({
+						address: vault?.address || "",
+						name: e.target.value
+					})
+				}
 				className="relative mb-auto w-full border-b-[1px] border-stone-950 bg-transparent py-8 uppercase text-white outline-none transition-all duration-200 ease-in-out hover:bg-stone-950"
 			/>
 

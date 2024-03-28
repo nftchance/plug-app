@@ -1,4 +1,5 @@
 export { useDebounce } from "@/lib/hooks/useDebounce"
+export { useClipboard } from "@/lib/hooks/useClipboard"
 export { useMouse } from "@/lib/hooks/useMouse"
 export { useBalance } from "@/lib/hooks/useBalance"
 export { useBlockchain } from "@/lib/hooks/useBlockchain"

@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"predev:db": "tsx lib/db.ts --tsconfig tsconfig.server.json",
-		"predev:prisma": "pnpm prisma:migrate && pnpm prisma:push",
+		"predev:prisma": "npx prisma-multischema && pnpm prisma:migrate && pnpm prisma:push",
 		"dev:next": "next dev --turbo",
 		"dev:wss": "tsx watch ./server/ws.dev.ts --tsconfig tsconfig.server.json",
 		"predev": "run-s predev:*",

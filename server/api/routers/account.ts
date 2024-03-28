@@ -1,5 +1,5 @@
 import { Alchemy, Network } from "alchemy-sdk"
-import { formatUnits, hexToBigInt } from "viem"
+import { hexToBigInt } from "viem"
 import { z } from "zod"
 
 import { TRPCError } from "@trpc/server"
@@ -8,6 +8,8 @@ import { truncateBalance } from "@/lib/blockchain"
 import { NATIVE_TOKEN_ADDRESS, TOKENS } from "@/lib/tokens"
 import { formatNumber } from "@/lib/utils"
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
+
+import vaultRouter from "./vault"
 
 // TODO: Right now we only show tokens that we have in our official token list,
 //       this should be updated so that users can import tokens that they may
@@ -116,5 +118,7 @@ export default createTRPCRouter({
 		} catch (e) {
 			throw new TRPCError({ code: "BAD_REQUEST" })
 		}
-	})
+	}),
+
+	vaults: vaultRouter
 })

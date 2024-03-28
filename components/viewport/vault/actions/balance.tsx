@@ -60,7 +60,7 @@ export const Balance: FC<
 						isChoosing: !domain.isChoosing
 					})
 				}
-				className="pointer-events-auto flex h-full w-full flex-row items-center justify-center border-b-[1px] border-stone-950 bg-transparent p-4 transition-all duration-200 ease-in-out hover:bg-stone-950"
+				className="pointer-events-auto flex h-min w-full flex-row items-center justify-center border-b-[1px] border-stone-950 bg-transparent p-4 transition-all duration-200 ease-in-out hover:bg-stone-950"
 			>
 				<Image
 					src={chainImage(domain.chain.id)}

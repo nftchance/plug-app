@@ -7,7 +7,7 @@ export const Vault: FC<PropsWithChildren> = () => {
 	const { expanded } = useTabs()
 
 	return expanded ? (
-		<div className="relative h-screen bg-stone-900 text-white">
+		<div className="flex h-screen flex-col bg-stone-900 text-white">
 			<Panel />
 		</div>
 	) : null

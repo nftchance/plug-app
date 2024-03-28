@@ -30,7 +30,7 @@ export const Wallet: FC<PropsWithChildren> = () => {
 						? handlePane(focused ? undefined : "wallet")
 						: open()
 				}
-				className={`flex h-full flex-row items-center justify-center border-l-[1px] border-stone-950 px-8 text-sm text-white/60 hover:bg-stone-950 active:bg-white active:text-stone-950 ${
+				className={`flex h-full flex-row items-center justify-center border-l-[1px] border-stone-950 px-4 text-sm text-white/60 hover:bg-stone-950 active:bg-white active:text-stone-950 ${
 					focused ? "active" : ""
 				}`}
 			>

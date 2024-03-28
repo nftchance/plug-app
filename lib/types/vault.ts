@@ -1,6 +1,9 @@
 export type Vault = {
-	address: `0x${string}`
+	address: string
+	ownerAddress: string
 	chainId: number
-	chainIds: Array<number>
-	name: string | undefined
+	name: string
+	createdAt: Date
+	updatedAt: Date
+	lastBlockIndexed: number
 }
