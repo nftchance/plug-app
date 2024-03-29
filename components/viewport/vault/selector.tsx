@@ -6,6 +6,7 @@ import { CheckIcon, ClipboardIcon } from "lucide-react"
 import { CaretDownIcon } from "@radix-ui/react-icons"
 
 import { useTabs, useVaults } from "@/contexts"
+import { INITIAL_PANE } from "@/contexts/TabsProvider"
 import { truncateAddress } from "@/lib/blockchain"
 import { useClipboard } from "@/lib/hooks"
 
@@ -23,8 +24,10 @@ export const Selector: FC<PropsWithChildren> = () => {
 			{vault ? (
 				<>
 					<button
-						onClick={() => handlePane(focused ? "vault" : "vaults")}
-						className="flex h-min w-full cursor-pointer flex-row items-center justify-center p-4 text-white hover:bg-stone-950 active:bg-white active:text-stone-950"
+						onClick={() =>
+							handlePane(focused ? INITIAL_PANE : "vaults")
+						}
+						className="z-[99] flex h-min w-full cursor-pointer flex-row items-center justify-center p-4 text-white hover:bg-stone-950 active:bg-white active:text-stone-950"
 					>
 						<BlockiesSvg
 							size={8}

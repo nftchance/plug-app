@@ -6,6 +6,7 @@ import { PlusIcon } from "lucide-react"
 import { CheckIcon } from "@radix-ui/react-icons"
 
 import { useTabs, useVaults } from "@/contexts"
+import { INITIAL_PANE } from "@/contexts/TabsProvider"
 import { truncateAddress } from "@/lib/blockchain"
 
 export const Vaults: FC<PropsWithChildren> = () => {
@@ -13,8 +14,8 @@ export const Vaults: FC<PropsWithChildren> = () => {
 	const { vault, vaults, handleAdd, handleSelect } = useVaults()
 
 	const handleVaultSelect = (address: string) => {
+		handlePane(INITIAL_PANE)
 		handleSelect(address)
-		handlePane("vault")
 	}
 
 	return (
