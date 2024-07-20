@@ -5,13 +5,9 @@ import { Earth, Gem, Plus, SearchIcon } from "lucide-react"
 
 import { Workflow } from "@prisma/client"
 
-import { Container, Header } from "@/components/app"
-import { PlugGrid } from "@/components/app/plugs/grid"
-import { Search } from "@/components/inputs/search"
-import { Tags } from "@/components/inputs/tags"
+import { Container, Header, PlugGrid, Search, Tags } from "@/components"
 import { usePlugs } from "@/contexts/PlugProvider"
-import { routes } from "@/lib/constants"
-import { useSearch } from "@/lib/hooks/useSearch"
+import { routes, useSearch } from "@/lib"
 import { api } from "@/server/client"
 
 const Page = () => {
@@ -91,7 +87,7 @@ const Page = () => {
 					<>
 						<Header
 							size="md"
-							icon={<Gem size={14} className="opacity-60" />}
+							icon={<Gem size={14} className="opacity-40" />}
 							label="Curated"
 						/>
 						<PlugGrid
@@ -104,7 +100,7 @@ const Page = () => {
 
 				<Header
 					size="md"
-					icon={<Earth size={14} className="opacity-60" />}
+					icon={<Earth size={14} className="opacity-40" />}
 					label="Community"
 				/>
 				<PlugGrid

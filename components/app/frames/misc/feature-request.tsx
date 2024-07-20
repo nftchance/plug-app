@@ -1,15 +1,11 @@
-import { FC, useState } from "react"
+import { useState } from "react"
 
-import { Badge, CheckCircle, Link, Send, Sparkle, Twitter } from "lucide-react"
+import { CheckCircle, Sparkle } from "lucide-react"
 import { Pen } from "lucide-react"
 
-import { Button } from "@/components/buttons"
-import { Search } from "@/components/inputs"
-import { useFrame, usePlugs } from "@/contexts"
-import { routes, useClipboard } from "@/lib"
+import { Button, Frame, Search } from "@/components"
+import { useFrame } from "@/contexts"
 import { api } from "@/server/client"
-
-import { Frame } from "../base"
 
 export const FeatureRequestFrame = () => {
 	const { frameVisible, handleFrameVisible } = useFrame()

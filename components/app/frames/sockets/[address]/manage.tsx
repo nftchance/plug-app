@@ -2,14 +2,11 @@ import { useEffect } from "react"
 
 import { PencilLine } from "lucide-react"
 
-import { Button } from "@/components/buttons"
-import { Search } from "@/components/inputs"
+import { Button, Frame, Search } from "@/components"
 import { useFrame, useSockets } from "@/contexts"
 import { useClipboard, useDebounce } from "@/lib"
 
-import { Frame } from "../../base"
-
-export const ManageFrame = () => {
+export const ManageSocketFrame = () => {
 	const { socket, handleRename } = useSockets()
 	const { frameVisible } = useFrame()
 	const { copied, handleCopied } = useClipboard(socket?.socketAddress ?? "")

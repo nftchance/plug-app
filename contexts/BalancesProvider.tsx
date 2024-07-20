@@ -1,7 +1,12 @@
-import type { FC, PropsWithChildren } from "react"
-import { createContext, useContext, useMemo } from "react"
+import {
+	createContext,
+	FC,
+	PropsWithChildren,
+	useContext,
+	useMemo
+} from "react"
 
-import { useDebounce } from "@/lib/hooks/useDebounce"
+import { useDebounce } from "@/lib"
 import { api } from "@/server/client"
 
 export const BalancesContext = createContext<{
@@ -38,6 +43,8 @@ export const useBalances = ({ address }: { address: string }) => {
 
 	const balances = useMemo(() => {
 		if (apiBalances === undefined) return undefined
+
+		if (search === "") return apiBalances
 
 		return apiBalances.filter(
 			token =>

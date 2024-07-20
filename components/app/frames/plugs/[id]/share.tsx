@@ -2,14 +2,12 @@ import Image from "next/image"
 
 import { Badge, Link, Send, Twitter } from "lucide-react"
 
-import { Button } from "@/components/buttons"
+import { Button, Frame } from "@/components"
 import { useFrame, usePlugs } from "@/contexts"
 import { routes, useClipboard } from "@/lib"
 
-import { Frame } from "../../base"
-
 export const ShareFrame = () => {
-	const { frameVisible, handleFrameVisible } = useFrame()
+	const { frameVisible } = useFrame()
 	const { plug } = usePlugs()
 
 	const { copied, handleCopied } = useClipboard(

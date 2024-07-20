@@ -1,9 +1,8 @@
-import { PlugZap, Plus, Puzzle, ToyBrick } from "lucide-react"
+import { PlugZap, Plus, Puzzle } from "lucide-react"
 
-import { Container, Header } from "@/components/app"
-import { PlugGrid } from "@/components/app/plugs/grid"
+import { Container, Header, PlugGrid } from "@/components"
 import { usePlugs } from "@/contexts/PlugProvider"
-import { routes } from "@/lib/constants"
+import { routes } from "@/lib"
 import { api } from "@/server/client"
 
 const Page = () => {
@@ -31,7 +30,7 @@ const Page = () => {
 
 				<Header
 					size="md"
-					icon={<Puzzle size={14} className="opacity-60" />}
+					icon={<Puzzle size={14} className="opacity-40" />}
 					label="Discover"
 					nextHref={routes.app.plugs.templates}
 					nextLabel="See All"
@@ -40,18 +39,12 @@ const Page = () => {
 
 				<Header
 					size="md"
-					icon={<PlugZap size={14} className="opacity-60" />}
+					icon={<PlugZap size={14} className="opacity-40" />}
 					label="My Plugs"
 					nextHref={routes.app.plugs.mine}
 					nextLabel="See All"
 				/>
 				<PlugGrid from={routes.app.plugs.index} plugs={myPlugs} />
-
-				{/* <Header
-					size="md"
-					icon={<ToyBrick size={14} className="opacity-60" />}
-					label="Protocol Actions"
-				/> */}
 			</Container>
 		</>
 	)

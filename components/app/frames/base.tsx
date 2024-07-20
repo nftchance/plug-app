@@ -3,11 +3,9 @@ import { FC, PropsWithChildren, useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { ChevronLeft, X } from "lucide-react"
 
-import { Button } from "@/components/buttons"
+import { Button, Header } from "@/components"
 import { useFrame } from "@/contexts"
-import { cn } from "@/lib/utils"
-
-import { Header } from "../header"
+import { cn } from "@/lib"
 
 type Props = PropsWithChildren & {
 	label: string
@@ -46,7 +44,11 @@ export const Frame: FC<Props> = ({
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
-						transition={{ duration: 0.2, ease: "easeInOut" }}
+						transition={{
+							duration: 0.2,
+							ease: "easeInOut",
+							delay: 0.1
+						}}
 						className={cn(
 							"fixed bottom-0 left-0 right-0 top-0 z-[10] cursor-pointer",
 							(handleBack === undefined || hasOverlay === true) &&
@@ -61,7 +63,7 @@ export const Frame: FC<Props> = ({
 						exit={{ y: "100%" }}
 						transition={{ duration: 0.2, ease: "easeInOut" }}
 						className={cn(
-							"fixed bottom-0 left-0 w-full rounded-t-[20px] bg-white px-6 py-8",
+							"fixed bottom-0 left-0 w-full rounded-t-lg bg-white px-6 py-8",
 							className,
 							"z-[11]"
 						)}
