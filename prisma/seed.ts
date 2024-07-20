@@ -2,7 +2,11 @@ import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
-const main = async () => {}
+const main = async () => {
+	// await seedTags()
+	// await seedActionCategories()
+	// await seedActions()
+}
 
 main()
 	.catch(e => {
